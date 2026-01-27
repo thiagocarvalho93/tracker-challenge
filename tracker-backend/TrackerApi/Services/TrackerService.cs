@@ -3,20 +3,17 @@ using TrackerApi.Services.Interfaces;
 
 namespace TrackerApi.Services;
 
-public class TrackerService : ITrackerService
+public class TrackerService(IPathService pathService) : ITrackerService
 {
-    public Task<decimal> GetOffset(Coordinate coordinate)
-    {
-        throw new NotImplementedException();
-    }
+    private readonly IPathService _pathService = pathService;
 
-    public Task<IEnumerable<Coordinate>> GetPath()
+    public Task<TrackingInformation> GetTrackingInformation(Coordinate coordinate)
     {
-        throw new NotImplementedException();
-    }
+        // TODO: Get path information
 
-    public Task<decimal> GetStation(Coordinate coordinate)
-    {
+        // TODO: Calculate offset
+
+        // TODO: Calculate station
         throw new NotImplementedException();
     }
 }
