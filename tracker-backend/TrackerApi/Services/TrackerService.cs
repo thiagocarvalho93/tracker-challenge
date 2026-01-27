@@ -1,11 +1,12 @@
 using TrackerApi.Models;
+using TrackerApi.Repositories.Interfaces;
 using TrackerApi.Services.Interfaces;
 
 namespace TrackerApi.Services;
 
-public class TrackerService(IPathService pathService) : ITrackerService
+public class TrackerService(IPathRepository pathRepository) : ITrackerService
 {
-    private readonly IPathService _pathService = pathService;
+    private readonly IPathRepository _pathRepository = pathRepository;
 
     public Task<TrackingInformation> GetTrackingInformation(Coordinate coordinate)
     {
@@ -15,5 +16,10 @@ public class TrackerService(IPathService pathService) : ITrackerService
 
         // TODO: Calculate station
         throw new NotImplementedException();
+    }
+
+    public async Task<IEnumerable<Coordinate>> GetPathCoordinates()
+    {
+        return await _pathRepository.GetPathCoordinates();
     }
 }

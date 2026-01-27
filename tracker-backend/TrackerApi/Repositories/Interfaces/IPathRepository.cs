@@ -1,8 +1,8 @@
 using TrackerApi.Models;
 
-namespace TrackerApi.Services.Interfaces;
+namespace TrackerApi.Repositories.Interfaces;
 
-public interface IPathService
+public interface IPathRepository
 {
     Task<IEnumerable<Coordinate>> GetPathCoordinates();
 }

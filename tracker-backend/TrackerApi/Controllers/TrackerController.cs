@@ -4,10 +4,9 @@ using TrackerApi.Services.Interfaces;
 
 namespace TrackerApi.Controllers;
 
-public class TrackerController(ITrackerService trackerService, IPathService pathService) : ControllerBase
+public class TrackerController(ITrackerService trackerService) : ControllerBase
 {
     private readonly ITrackerService _trackerService = trackerService;
-    private readonly IPathService _pathService = pathService;
 
     [HttpGet("info")]
     public async Task<IActionResult> GetOffset([FromQuery] Coordinate coordinate)
@@ -18,6 +17,6 @@ public class TrackerController(ITrackerService trackerService, IPathService path
     [HttpGet("path-coordinates")]
     public async Task<IActionResult> GetPathCoordinates()
     {
-        return Ok(await _pathService.GetPathCoordinates());
+        return Ok(await _trackerService.GetPathCoordinates());
     }
 }

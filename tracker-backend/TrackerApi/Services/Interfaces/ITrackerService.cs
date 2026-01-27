@@ -5,4 +5,5 @@ namespace TrackerApi.Services.Interfaces;
 public interface ITrackerService
 {
     Task<TrackingInformation> GetTrackingInformation(Coordinate coordinate);
+    Task<IEnumerable<Coordinate>> GetPathCoordinates();
 }
