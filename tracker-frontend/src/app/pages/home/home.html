@@ -1,3 +1,3 @@
-<input type="text" placeholder="x location" />
-<input type="text" placeholder="y location" />
-<app-graph />
+<input type="text" placeholder="x location" [(ngModel)]="userCoordinates().x" />
+<input type="text" placeholder="y location" [(ngModel)]="userCoordinates().y" />
+<app-graph [currentLocation]="userCoordinates()" [pathCoordinates]="pathCoordinates()" />

@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, input } from '@angular/core';
+import { Coordinate } from '../../models/coordinate.type';
 
 @Component({
   selector: 'app-graph',
@@ -7,5 +8,6 @@ import { Component } from '@angular/core';
   styleUrl: './graph.css',
 })
 export class Graph {
-
+  pathCoordinates = input.required<Array<Coordinate>>();
+  currentLocation = input.required<Coordinate>();
 }
