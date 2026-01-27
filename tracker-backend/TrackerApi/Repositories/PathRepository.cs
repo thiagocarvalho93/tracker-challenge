@@ -8,11 +8,11 @@ public class PathRepository : IPathRepository
 {
     public async Task<IEnumerable<Coordinate>> GetPathCoordinates()
     {
-        // Read csv file in wwwroot (polyline sample.csv)
+        // Read csv file (polyline sample.csv)
         var filePath = Path.Combine(
             Directory.GetCurrentDirectory(),
-            "wwwroot",
-            "polyline-sample.csv"
+            "Data",
+            "polyline sample.csv"
         );
 
         if (!File.Exists(filePath))

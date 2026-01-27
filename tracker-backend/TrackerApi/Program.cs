@@ -1,3 +1,8 @@
+using TrackerApi.Repositories;
+using TrackerApi.Repositories.Interfaces;
+using TrackerApi.Services;
+using TrackerApi.Services.Interfaces;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -6,6 +11,10 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+// DI
+builder.Services.AddScoped<ITrackerService, TrackerService>();
+builder.Services.AddScoped<IPathRepository, PathRepository>();
 
 var app = builder.Build();
 
