@@ -1,3 +1,5 @@
+using System.Collections;
+using System.Numerics;
 using TrackerApi.Models;
 using TrackerApi.Repositories.Interfaces;
 using TrackerApi.Services.Interfaces;
@@ -10,11 +12,34 @@ public class TrackerService(IPathRepository pathRepository) : ITrackerService
 
     public async Task<Status> GetStatus(Coordinate coordinate)
     {
-        var path = await GetPathCoordinates();
-        // TODO: Calculate offset
+        var coordinates = (await GetPathCoordinates()).ToArray();
 
-        // TODO: Calculate station
-        throw new NotImplementedException();
+        if (coordinates.Length < 2)
+            throw new InvalidOperationException("Path must contain at least two coordinates.");
+
+        var lines = LineSegment.GetLinesFromCoordinates(coordinates);
+
+        var point = new Vector2(coordinate.X, coordinate.Y);
+
+        float minOffset = float.MaxValue;
+        float station = 0f;
+        float accumulatedLength = 0f;
+
+        foreach (var line in lines)
+        {
+            var closestPoint = line.ClosestPoint(point);
+            var distance = Vector2.Distance(point, closestPoint);
+
+            if (distance < minOffset)
+            {
+                minOffset = distance;
+                station = accumulatedLength + Vector2.Distance(line.Start, closestPoint);
+            }
+
+            accumulatedLength += line.Length;
+        }
+
+        return new Status(minOffset, station);
     }
 
     public async Task<IEnumerable<Coordinate>> GetPathCoordinates()
