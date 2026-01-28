@@ -8,13 +8,13 @@ public class TrackerController(ITrackerService trackerService) : ControllerBase
 {
     private readonly ITrackerService _trackerService = trackerService;
 
-    [HttpGet("info")]
-    public async Task<IActionResult> GetTrackingInformation([FromQuery] Coordinate coordinate)
+    [HttpGet("status")]
+    public async Task<IActionResult> GetStatus([FromQuery] Coordinate coordinate)
     {
-        return Ok(await _trackerService.GetTrackingInformation(coordinate));
+        return Ok(await _trackerService.GetStatus(coordinate));
     }
 
-    [HttpGet("path-coordinates")]
+    [HttpGet("path")]
     public async Task<IActionResult> GetPathCoordinates()
     {
         return Ok(await _trackerService.GetPathCoordinates());

@@ -8,10 +8,9 @@ public class TrackerService(IPathRepository pathRepository) : ITrackerService
 {
     private readonly IPathRepository _pathRepository = pathRepository;
 
-    public Task<TrackingInformation> GetTrackingInformation(Coordinate coordinate)
+    public async Task<Status> GetStatus(Coordinate coordinate)
     {
-        // TODO: Get path information
-
+        var path = await GetPathCoordinates();
         // TODO: Calculate offset
 
         // TODO: Calculate station
