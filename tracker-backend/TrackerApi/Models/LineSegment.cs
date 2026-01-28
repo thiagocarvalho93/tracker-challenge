@@ -4,53 +4,104 @@ namespace TrackerApi.Models;
 
 public class LineSegment
 {
-    public Coordinate InitialCoordinate { get; set; }
-    public Coordinate FinalCoordinate { get; set; }
-    public double? Slope { get; set; }
-    public double Intercept { get; set; }
+    public Vector2 Start { get; }
+    public Vector2 End { get; }
 
-    public LineSegment(Coordinate initialCoordinate, Coordinate finalCoordinate)
+    public LineSegment(Vector2 start, Vector2 end)
     {
-        InitialCoordinate = initialCoordinate;
-        FinalCoordinate = finalCoordinate;
+        if (start == end)
+            throw new ArgumentException("A line segment cannot have zero length.");
 
-        CalculateSlope();
-        CalculateIntercept();
+        Start = start;
+        End = end;
     }
 
-    private void CalculateSlope()
+    public LineSegment(Coordinate start, Coordinate end)
     {
-        var yDiff = FinalCoordinate.Y - InitialCoordinate.Y;
-        var xDiff = FinalCoordinate.X - InitialCoordinate.X;
+        Start = new Vector2(start.X, start.Y);
+        End = new Vector2(end.X, end.Y);
 
-        if (xDiff == 0)
-            Slope = null;
-
-        Slope = yDiff / xDiff;
+        if (Start == End)
+            throw new ArgumentException("A line segment cannot have zero length.");
     }
 
-    private void CalculateIntercept()
+    /// <summary>
+    /// Direction vector (End - Start)
+    /// </summary>
+    public Vector2 Direction => End - Start;
+
+    /// <summary>
+    /// Length of the segment
+    /// </summary>
+    public float Length => Vector2.Distance(Start, End);
+
+    /// <summary>
+    /// Squared length
+    /// </summary>
+    public float LengthSquared => Vector2.DistanceSquared(Start, End);
+
+    /// <summary>
+    /// Slope (null for vertical lines)
+    /// </summary>
+    public float? Slope
     {
-        if (Slope is null)
+        get
         {
-            Intercept = InitialCoordinate.X;
+            if (End.X == Start.X)
+                return null;
+
+            var dy = End.Y - Start.Y;
+            var dx = End.X - Start.X;
+
+            return dy / dx;
         }
-        Intercept = InitialCoordinate.Y - Slope.GetValueOrDefault() * InitialCoordinate.X;
     }
 
-    public Coordinate GetNearestPoint(Coordinate coordinate)
+    /// <summary>
+    /// Closest point on the segment to an external point
+    /// </summary>
+    public Vector2 ClosestPoint(Vector2 p)
     {
-        if (Slope is null)
+        var ab = End - Start;
+        var ap = p - Start;
+
+        var t = Vector2.Dot(ap, ab);
+
+        var tNormalized = t / ab.LengthSquared();
+
+        tNormalized = MathF.Max(0, MathF.Min(1, tNormalized));
+
+        return Start + tNormalized * ab;
+    }
+
+    public float DistanceTo(Vector2 point)
+    {
+        var closest = ClosestPoint(point);
+
+        return Vector2.Distance(point, closest);
+    }
+
+    /// <summary>
+    /// Gets lines from a collection of coordinates
+    /// </summary>
+    /// <param name="coordinates">A collection of coordinates</param>
+    /// <returns></returns>
+    public static List<LineSegment> GetLinesFromCoordinates(IEnumerable<Coordinate> coordinates)
+    {
+        ArgumentNullException.ThrowIfNull(coordinates);
+
+        var points = coordinates.ToArray();
+
+        if (points.Length < 2)
+            return [];
+
+        var lines = new List<LineSegment>(points.Length - 1);
+
+        for (int i = 1; i < points.Length; i++)
         {
-            return new Coordinate(InitialCoordinate.X, coordinate.Y);
+            lines.Add(new LineSegment(points[i - 1], points[i]));
         }
-        var x = (coordinate.X + Slope * (coordinate.Y - Intercept)) /
-            (1 + Math.Pow(Slope.GetValueOrDefault(), 2));
 
-        var y = Slope.GetValueOrDefault() * x + Intercept;
-
-        var nearest = new Coordinate(x.GetValueOrDefault(), y.GetValueOrDefault());
-
-        return nearest;
+        return lines;
     }
 }
