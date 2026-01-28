@@ -1,3 +1,4 @@
 <input type="text" placeholder="x location" [(ngModel)]="userCoordinates().x" />
 <input type="text" placeholder="y location" [(ngModel)]="userCoordinates().y" />
+<button (click)="handleUpdateLocation()">Update Location</button>
 <app-graph [currentLocation]="userCoordinates()" [pathCoordinates]="pathCoordinates()" />
