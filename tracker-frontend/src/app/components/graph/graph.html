@@ -1,53 +1,57 @@
 <div class="graph-container">
-  <svg [attr.viewBox]="viewBox()" preserveAspectRatio="xMidYMid meet">
-    <g class="current">
-      <circle [attr.cx]="currentLocation().x" [attr.cy]="currentLocation().y" r="1" fill="blue">
-        <animate attributeName="r" values="1.5;2;1.5" dur="1.2s" repeatCount="indefinite" />
-      </circle>
-    </g>
+  <svg #svgGraph [attr.viewBox]="viewBox()" preserveAspectRatio="xMidYMid meet">
+    <g class="flip-y" [attr.transform]="`scale(1, -1) translate(0, -180)`">
+      <g class="current">
+        <circle [attr.cx]="currentLocation().x" [attr.cy]="currentLocation().y" r="1" fill="blue">
+          <animate attributeName="r" values="1.5;2;1.5" dur="1.2s" repeatCount="indefinite" />
+        </circle>
+      </g>
 
-    <g class="markers">
-      <circle [attr.cx]="startPoint().x" [attr.cy]="startPoint().y" r="1" fill="red" />
-      <text
-        [attr.x]="startPoint().x + 2"
-        [attr.y]="startPoint().y"
-        class="text"
-        vector-effect="non-scaling-stroke"
-      >
-        Start
-      </text>
-
-      <circle [attr.cx]="endPoint().x" [attr.cy]="endPoint().y" r="1" fill="red" />
-      <text
-        [attr.x]="endPoint().x + 2"
-        [attr.y]="endPoint().y"
-        class="text"
-        vector-effect="non-scaling-stroke"
-      >
-        End
-      </text>
-    </g>
-
-    <g class="path">
-      <polyline
-        [attr.points]="polylinePoints()"
-        fill="none"
-        stroke="black"
-        stroke-linejoin="round"
-      />
-    </g>
-
-    <g class="offset-line">
-      @if (status().closestPoint) {
-        <line
-          [attr.x1]="status().closestPoint?.x"
-          [attr.y1]="status().closestPoint?.y"
-          [attr.x2]="currentLocation().x"
-          [attr.y2]="currentLocation().y"
+      <g class="markers">
+        <circle [attr.cx]="startPoint().x" [attr.cy]="startPoint().y" r="1" fill="red" />
+        <text
+          [attr.x]="startPoint().x + 2"
+          [attr.y]="-startPoint().y"
+          class="text"
+          transform="scale(1 -1)"
           vector-effect="non-scaling-stroke"
-          stroke="blue"
+        >
+          Start
+        </text>
+
+        <circle [attr.cx]="endPoint().x" [attr.cy]="endPoint().y" r="1" fill="red" />
+        <text
+          [attr.x]="endPoint().x + 2"
+          [attr.y]="-endPoint().y"
+          class="text"
+          transform="scale(1 -1)"
+          vector-effect="non-scaling-stroke"
+        >
+          End
+        </text>
+      </g>
+
+      <g class="path">
+        <polyline
+          [attr.points]="polylinePoints()"
+          fill="none"
+          stroke="black"
+          stroke-linejoin="round"
         />
-      }
+      </g>
+
+      <g class="offset-line">
+        @if (status().closestPoint) {
+          <line
+            [attr.x1]="status().closestPoint?.x"
+            [attr.y1]="status().closestPoint?.y"
+            [attr.x2]="currentLocation().x"
+            [attr.y2]="currentLocation().y"
+            vector-effect="non-scaling-stroke"
+            stroke="blue"
+          />
+        }
+      </g>
     </g>
   </svg>
 </div>
