@@ -13,20 +13,26 @@ export class Graph {
   status = input.required<Status>();
   currentLocation = input.required<Coordinate>();
 
-  lines = computed(() =>
+  startPoint = computed(() => this.pathCoordinates()[0]);
+  endPoint = computed(() => {
+    const path = this.pathCoordinates();
+    return path[path.length - 1];
+  });
+  polylinePoints = computed(() =>
     this.pathCoordinates()
-      .slice(0, -1)
-      .map((point, i) => [point, this.pathCoordinates()[i + 1]]),
+      .map((p) => `${p.x},${p.y}`)
+      .join(' '),
   );
-
   viewBox = computed(() => {
-    const padding = 10;
+    const paddingX = 20;
+    const paddingY = 10;
+
     const xs = this.pathCoordinates().map((coord) => coord.x);
     const ys = this.pathCoordinates().map((coord) => coord.y);
-    const minX = Math.min(...xs) - padding;
-    const maxX = Math.max(...xs) + padding;
-    const minY = Math.min(...ys) - padding;
-    const maxY = Math.max(...ys) + padding;
+    const minX = Math.min(...xs) - paddingX;
+    const maxX = Math.max(...xs) + paddingX;
+    const minY = Math.min(...ys) - paddingY;
+    const maxY = Math.max(...ys) + paddingY;
     const width = maxX - minX;
     const height = maxY - minY;
     return `${minX} ${minY} ${width} ${height}`;

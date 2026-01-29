@@ -54,5 +54,7 @@ export class Home implements OnInit {
         this.pathCoordinates.set(coordinates);
         this.userCoordinatesInput.set({ x: coordinates[0].x, y: coordinates[0].y });
       });
+
+    this.handleUpdateLocation();
   }
 }

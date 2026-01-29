@@ -1,12 +1,9 @@
-.graph-container {
-  width: calc(100vw);
-  height: 10vh;
-}
 svg {
-  width: 100vw;
-  height: 90vh;
-  border: 1px solid black;
+  width: calc(100vw - 10px);
+  height: calc(100vh - 150px);
+  cursor: crosshair;
 }
 .text {
-  font-size: 8px;
+  font-size: 6px;
+  dominant-baseline: middle;
 }
