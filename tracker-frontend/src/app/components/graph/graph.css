@@ -7,3 +7,26 @@ svg {
   font-size: 6px;
   dominant-baseline: middle;
 }
+
+.offset-line {
+  stroke-dasharray: 10;
+  animation: dash-loop 5s linear infinite;
+}
+
+@keyframes dash-loop {
+  to {
+    stroke-dashoffset: 200;
+  }
+}
+
+.path-polyline {
+  stroke-dasharray: 1000;
+  stroke-dashoffset: 1000;
+  animation: dash 0.5s ease-in-out forwards;
+}
+
+@keyframes dash {
+  to {
+    stroke-dashoffset: 0;
+  }
+}

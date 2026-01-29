@@ -37,10 +37,11 @@
           fill="none"
           stroke="black"
           stroke-linejoin="round"
+          class="path-polyline"
         />
       </g>
 
-      <g class="offset-line">
+      <g class="offset">
         @if (status().closestPoint) {
           <line
             [attr.x1]="status().closestPoint?.x"
@@ -49,6 +50,7 @@
             [attr.y2]="currentLocation().y"
             vector-effect="non-scaling-stroke"
             stroke="blue"
+            class="offset-line"
           />
         }
       </g>
