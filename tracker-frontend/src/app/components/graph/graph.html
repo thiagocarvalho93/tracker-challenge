@@ -1,9 +1,38 @@
 <div class="graph-container">
-  <svg #svgGraph [attr.viewBox]="viewBox()" preserveAspectRatio="xMidYMid meet">
-    <g class="flip-y" [attr.transform]="`scale(1, -1) translate(0, -180)`">
+  <svg #svgGraph [attr.viewBox]="viewBoxString()" preserveAspectRatio="xMidYMid meet">
+    <g class="flip-y" [attr.transform]="flipTransform()">
+      <g class="path">
+        <polyline
+          [attr.points]="polylinePoints()"
+          fill="none"
+          stroke="black"
+          stroke-linejoin="round"
+          class="path-polyline"
+        />
+      </g>
+      <g class="axis">
+        <line
+          x1="0"
+          [attr.y1]="viewBox().minY"
+          x2="0"
+          [attr.y2]="viewBox().maxY"
+          stroke="gray"
+          stroke-dasharray="2,2"
+          vector-effect="non-scaling-stroke"
+        />
+        <line
+          [attr.x1]="viewBox().minX"
+          y1="0"
+          [attr.x2]="viewBox().maxX"
+          y2="0"
+          stroke="gray"
+          stroke-dasharray="2,2"
+          vector-effect="non-scaling-stroke"
+        />
+      </g>
       <g class="current">
         <circle [attr.cx]="currentLocation().x" [attr.cy]="currentLocation().y" r="1" fill="blue">
-          <animate attributeName="r" values="1.5;2;1.5" dur="1.2s" repeatCount="indefinite" />
+          <animate attributeName="r" values="2;3;2" dur="1.2s" repeatCount="indefinite" />
         </circle>
       </g>
 
@@ -29,16 +58,6 @@
         >
           End
         </text>
-      </g>
-
-      <g class="path">
-        <polyline
-          [attr.points]="polylinePoints()"
-          fill="none"
-          stroke="black"
-          stroke-linejoin="round"
-          class="path-polyline"
-        />
       </g>
 
       <g class="offset">

@@ -1,11 +1,11 @@
 svg {
   width: calc(100vw - 10px);
   height: calc(100vh - 150px);
-  cursor: crosshair;
 }
 .text {
-  font-size: 6px;
+  font-size: 5px;
   dominant-baseline: middle;
+  font-family: sans-serif;
 }
 
 .offset-line {

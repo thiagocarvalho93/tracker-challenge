@@ -35,6 +35,26 @@ export class Graph {
     const maxY = Math.max(...ys) + paddingY;
     const width = maxX - minX;
     const height = maxY - minY;
-    return `${minX} ${minY} ${width} ${height}`;
+    return {
+      minX,
+      minY,
+      maxY,
+      maxX,
+      width,
+      height,
+    };
+  });
+  viewBoxString = computed(() => {
+    return `${this.viewBox().minX} ${this.viewBox().minY} ${this.viewBox().width} ${this.viewBox().height}`;
+  });
+  midY = computed(() => {
+    const vb = this.viewBox();
+    return (vb.minY + vb.maxY) / 2;
+  });
+  baselineY = computed(() => {
+    return this.viewBox().minY + this.viewBox().maxY;
+  });
+  flipTransform = computed(() => {
+    return `translate(0 ${this.baselineY()}) scale(1 -1)`;
   });
 }
