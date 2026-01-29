@@ -5,35 +5,30 @@
         <polyline
           [attr.points]="polylinePoints()"
           fill="none"
-          stroke="black"
+          stroke="red"
           stroke-linejoin="round"
           class="path-polyline"
+          stroke-dasharray="2.2"
+          vector-effect="non-scaling-stroke"
         />
       </g>
       <g class="axis">
         <line
           x1="0"
-          [attr.y1]="viewBox().minY"
+          [attr.y1]="viewBox().minY - viewBox().height"
           x2="0"
-          [attr.y2]="viewBox().maxY"
+          [attr.y2]="viewBox().maxY + viewBox().height"
           stroke="gray"
-          stroke-dasharray="2,2"
           vector-effect="non-scaling-stroke"
         />
         <line
-          [attr.x1]="viewBox().minX"
+          [attr.x1]="viewBox().minX - viewBox().width"
           y1="0"
-          [attr.x2]="viewBox().maxX"
+          [attr.x2]="viewBox().maxX + viewBox().width"
           y2="0"
           stroke="gray"
-          stroke-dasharray="2,2"
           vector-effect="non-scaling-stroke"
         />
-      </g>
-      <g class="current">
-        <circle [attr.cx]="currentLocation().x" [attr.cy]="currentLocation().y" r="1" fill="blue">
-          <animate attributeName="r" values="2;3;2" dur="1.2s" repeatCount="indefinite" />
-        </circle>
       </g>
 
       <g class="markers">
@@ -58,6 +53,12 @@
         >
           End
         </text>
+      </g>
+
+      <g class="current">
+        <circle [attr.cx]="currentLocation().x" [attr.cy]="currentLocation().y" r="1" fill="blue">
+          <animate attributeName="r" values="2;3;2" dur="1.2s" repeatCount="indefinite" />
+        </circle>
       </g>
 
       <g class="offset">
