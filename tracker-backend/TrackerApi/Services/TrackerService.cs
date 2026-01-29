@@ -24,6 +24,7 @@ public class TrackerService(IPathRepository pathRepository) : ITrackerService
         float minOffset = float.MaxValue;
         float station = 0f;
         float accumulatedLength = 0f;
+        var offsetPoint = lines.First().Start;
 
         foreach (var line in lines)
         {
@@ -34,12 +35,13 @@ public class TrackerService(IPathRepository pathRepository) : ITrackerService
             {
                 minOffset = distance;
                 station = accumulatedLength + Vector2.Distance(line.Start, closestPoint);
+                offsetPoint = closestPoint;
             }
 
             accumulatedLength += line.Length;
         }
 
-        return new Status(minOffset, station);
+        return new Status(minOffset, station, new Coordinate(offsetPoint.X, offsetPoint.Y));
     }
 
     public async Task<IEnumerable<Coordinate>> GetPathCoordinates()
