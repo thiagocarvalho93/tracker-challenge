@@ -6,10 +6,24 @@ import { FormsModule } from '@angular/forms';
 import { catchError } from 'rxjs';
 import { Status } from '../../models/status.type';
 import { DecimalPipe } from '@angular/common';
+import { MatButton } from '@angular/material/button';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatDividerModule } from '@angular/material/divider';
 
 @Component({
   selector: 'app-home',
-  imports: [Graph, FormsModule, DecimalPipe],
+  imports: [
+    Graph,
+    FormsModule,
+    DecimalPipe,
+    MatButton,
+    MatFormFieldModule,
+    MatIconModule,
+    MatInputModule,
+    MatDividerModule,
+  ],
   templateUrl: './home.html',
   styleUrl: './home.css',
 })

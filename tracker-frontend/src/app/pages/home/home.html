@@ -1,11 +1,23 @@
-<input type="text" placeholder="x location" [(ngModel)]="userCoordinatesInput().x" />
-<input type="text" placeholder="y location" [(ngModel)]="userCoordinatesInput().y" />
-<button (click)="handleUpdateLocation()">Update Location</button>
-<p>OFFSET: {{ status().offset | number }}</p>
-<p>STATION: {{ status().station | number }}</p>
-
-<app-graph
-  [currentLocation]="userCoordinates()"
-  [pathCoordinates]="pathCoordinates()"
-  [status]="status()"
-/>
+<div class="home-container">
+  <div class="form-container">
+    <mat-form-field appearance="outline">
+      <mat-label>X coordinates</mat-label>
+      <input matInput [(ngModel)]="userCoordinatesInput().x" placeholder="Placeholder" />
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Y coordinates</mat-label>
+      <input matInput [(ngModel)]="userCoordinatesInput().y" placeholder="Placeholder" />
+    </mat-form-field>
+    <button filled matButton="outlined" (click)="handleUpdateLocation()">Update Location</button>
+    <p>OFFSET: {{ status().offset | number }}</p>
+    <p>STATION: {{ status().station | number }}</p>
+  </div>
+  <mat-divider></mat-divider>
+  <div class="graph-container">
+    <app-graph
+      [currentLocation]="userCoordinates()"
+      [pathCoordinates]="pathCoordinates()"
+      [status]="status()"
+    />
+  </div>
+</div>
