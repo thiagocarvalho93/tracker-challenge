@@ -1,0 +1,12 @@
+.graph-container {
+  width: calc(100vw);
+  height: 10vh;
+}
+svg {
+  width: 100vw;
+  height: 90vh;
+  border: 1px solid black;
+}
+.text {
+  font-size: 8px;
+}

@@ -1,1 +1,52 @@
-<p>graph</p>
+<div class="graph-container">
+  <svg [attr.viewBox]="viewBox()" preserveAspectRatio="xMidYMid meet">
+    <circle [attr.cx]="currentLocation().x" [attr.cy]="currentLocation().y" r="1" fill="blue">
+      <animate attributeName="r" values="1;1.5;1" dur="1.2s" repeatCount="indefinite" />
+    </circle>
+
+    <circle
+      [attr.cx]="pathCoordinates()[0].x"
+      [attr.cy]="pathCoordinates()[0].y"
+      r="1"
+      fill="red"
+    />
+    <text [attr.x]="pathCoordinates()[0].x + 2" [attr.y]="pathCoordinates()[0].y" class="text">
+      Start
+    </text>
+    <circle
+      [attr.cx]="pathCoordinates()[pathCoordinates().length - 1].x"
+      [attr.cy]="pathCoordinates()[pathCoordinates().length - 1].y"
+      r="1"
+      fill="red"
+    />
+    <text
+      [attr.x]="pathCoordinates()[pathCoordinates().length - 1].x + 2"
+      [attr.y]="pathCoordinates()[pathCoordinates().length - 1].y"
+      class="text"
+    >
+      End
+    </text>
+
+    <!-- lines for the path -->
+    @for (item of lines(); track $index) {
+      <line
+        [attr.x1]="item[0].x"
+        [attr.y1]="item[0].y"
+        [attr.x2]="item[1].x"
+        [attr.y2]="item[1].y"
+        vector-effect="non-scaling-stroke"
+        stroke="black"
+      />
+    }
+    @if (status().closestPoint) {
+      <line
+        [attr.x1]="status().closestPoint?.x"
+        [attr.y1]="status().closestPoint?.y"
+        [attr.x2]="currentLocation().x"
+        [attr.y2]="currentLocation().y"
+        vector-effect="non-scaling-stroke"
+        stroke="blue"
+      />
+    }
+  </svg>
+</div>

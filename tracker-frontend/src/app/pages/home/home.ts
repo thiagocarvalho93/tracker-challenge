@@ -5,10 +5,11 @@ import { Coordinate } from '../../models/coordinate.type';
 import { FormsModule } from '@angular/forms';
 import { catchError } from 'rxjs';
 import { Status } from '../../models/status.type';
+import { DecimalPipe } from '@angular/common';
 
 @Component({
   selector: 'app-home',
-  imports: [Graph, FormsModule],
+  imports: [Graph, FormsModule, DecimalPipe],
   templateUrl: './home.html',
   styleUrl: './home.css',
 })
@@ -16,9 +17,15 @@ export class Home implements OnInit {
   trackerService = inject(TrackerService);
   pathCoordinates = signal<Array<Coordinate>>([]);
   userCoordinates = signal<Coordinate>({ x: 0, y: 0 });
+  userCoordinatesInput = signal<Coordinate>({ x: 0, y: 0 });
   status = signal<Status>({});
 
   handleUpdateLocation() {
+    this.userCoordinates.set({
+      x: this.userCoordinatesInput().x,
+      y: this.userCoordinatesInput().y,
+    });
+
     this.trackerService
       .getStatus(this.userCoordinates())
       .pipe(
@@ -45,6 +52,7 @@ export class Home implements OnInit {
       .subscribe((coordinates) => {
         console.log('Fetched path coordinates:', coordinates);
         this.pathCoordinates.set(coordinates);
+        this.userCoordinatesInput.set({ x: coordinates[0].x, y: coordinates[0].y });
       });
   }
 }

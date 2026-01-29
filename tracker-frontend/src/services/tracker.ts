@@ -12,13 +12,13 @@ export class TrackerService {
   httpClient = inject(HttpClient);
 
   getPathCoordinates(): Observable<Coordinate[]> {
-    const url = `${BASE_URL}/path-coordinates`;
+    const url = `${BASE_URL}/path`;
 
     return this.httpClient.get<Array<Coordinate>>(url);
   }
 
   getStatus(coordinate: Coordinate): Observable<Status> {
-    const url = `${BASE_URL}/info?x=${coordinate.x}&y=${coordinate.y}`;
+    const url = `${BASE_URL}/status?x=${coordinate.x}&y=${coordinate.y}`;
 
     return this.httpClient.get<Status>(url);
   }

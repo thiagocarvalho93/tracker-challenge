@@ -1,4 +1,11 @@
-<input type="text" placeholder="x location" [(ngModel)]="userCoordinates().x" />
-<input type="text" placeholder="y location" [(ngModel)]="userCoordinates().y" />
+<input type="text" placeholder="x location" [(ngModel)]="userCoordinatesInput().x" />
+<input type="text" placeholder="y location" [(ngModel)]="userCoordinatesInput().y" />
 <button (click)="handleUpdateLocation()">Update Location</button>
-<app-graph [currentLocation]="userCoordinates()" [pathCoordinates]="pathCoordinates()" />
+<p>OFFSET: {{ status().offset | number }}</p>
+<p>STATION: {{ status().station | number }}</p>
+
+<app-graph
+  [currentLocation]="userCoordinates()"
+  [pathCoordinates]="pathCoordinates()"
+  [status]="status()"
+/>
