@@ -9,8 +9,10 @@
       <input matInput [(ngModel)]="userCoordinatesInput().y" placeholder="Placeholder" />
     </mat-form-field>
     <button filled matButton="outlined" (click)="handleUpdateLocation()">Update Location</button>
-    <p>OFFSET: {{ status().offset | number }}</p>
-    <p>STATION: {{ status().station | number }}</p>
+  </div>
+  <div class="cards-container">
+    <p class="status-text">Offset: {{ status().offset | number }}</p>
+    <p class="status-text">Station: {{ status().station | number }}</p>
   </div>
   <mat-divider></mat-divider>
   <div class="graph-container">
