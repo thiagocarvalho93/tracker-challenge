@@ -17,8 +17,8 @@ export class TrackerService {
     return this.httpClient.get<Array<Coordinate>>(url);
   }
 
-  getStatus(coordinate: Coordinate, stateful = false): Observable<Status> {
-    const url = `${BASE_URL}/status?x=${coordinate.x}&y=${coordinate.y}&stateful=${stateful}`;
+  getStatus(coordinate: Coordinate, trackLine: boolean = false): Observable<Status> {
+    const url = `${BASE_URL}/status?x=${coordinate.x}&y=${coordinate.y}&trackLine=${trackLine}`;
 
     return this.httpClient.get<Status>(url);
   }

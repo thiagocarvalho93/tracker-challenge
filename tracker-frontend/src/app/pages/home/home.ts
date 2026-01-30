@@ -11,6 +11,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatDividerModule } from '@angular/material/divider';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 @Component({
   selector: 'app-home',
@@ -23,6 +24,7 @@ import { MatDividerModule } from '@angular/material/divider';
     MatIconModule,
     MatInputModule,
     MatDividerModule,
+    MatCheckboxModule,
   ],
   templateUrl: './home.html',
   styleUrl: './home.css',
@@ -33,6 +35,7 @@ export class Home implements OnInit {
   userCoordinates = signal<Coordinate>({ x: 0, y: 0 });
   userCoordinatesInput = signal<Coordinate>({ x: 0, y: 0 });
   status = signal<Status>({});
+  trackCurrentLine = signal<boolean>(false);
 
   handleResetCurrentLine() {
     this.trackerService
@@ -56,7 +59,7 @@ export class Home implements OnInit {
     });
 
     this.trackerService
-      .getStatus(this.userCoordinates())
+      .getStatus(this.userCoordinates(), this.trackCurrentLine())
       .pipe(
         catchError((error) => {
           console.error('Error fetching status:', error);

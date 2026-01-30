@@ -12,6 +12,9 @@
     <button filled matButton="outlined" (click)="handleResetCurrentLine()">
       Reset Current Line
     </button>
+    <mat-checkbox [checked]="trackCurrentLine()" (change)="trackCurrentLine.set($event.checked)">
+      Track Line
+    </mat-checkbox>
   </div>
   <div class="cards-container">
     <p class="status-text offset-text">Offset: {{ status().offset | number }}</p>
