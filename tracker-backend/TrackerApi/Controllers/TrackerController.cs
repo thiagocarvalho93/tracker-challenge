@@ -15,14 +15,22 @@ public class TrackerController(ITrackerService trackerService) : ControllerBase
     }
 
     [HttpGet("status-stateful")]
-    public async Task<IActionResult> GetStatusStatefull([FromQuery] CoordinateDTO coordinate, [FromQuery] int lineIndex)
+    public async Task<IActionResult> GetStatusStatefull([FromQuery] CoordinateDTO coordinate)
     {
-        return Ok(await _trackerService.GetStatusStateful(coordinate, lineIndex));
+        return Ok(await _trackerService.GetStatusStateful(coordinate));
     }
 
     [HttpGet("path")]
     public async Task<IActionResult> GetPathCoordinates()
     {
         return Ok(await _trackerService.GetPathCoordinates());
+    }
+
+    [HttpDelete("reset")]
+    public async Task<IActionResult> ResetCurrentLine([FromServices] IStateService stateService)
+    {
+        stateService.ResetCurrentLine();
+
+        return NoContent();
     }
 }
