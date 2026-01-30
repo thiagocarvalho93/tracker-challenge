@@ -3,7 +3,7 @@ svg {
   height: calc(100vh - 220px);
 }
 .text {
-  font-size: 5px;
+  font-size: 7px;
   dominant-baseline: middle;
   font-family: sans-serif;
 }

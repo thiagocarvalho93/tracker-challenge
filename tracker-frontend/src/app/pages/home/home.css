@@ -29,11 +29,15 @@
   color: #e14b31;
 }
 
-.form-card {
+.form-card, .graph-card {
   padding-left: 20px;
   padding-right: 20px;
   padding-top: 20px;
   margin-bottom: 20px;
+}
+
+.graph-card {
+  background-color: #d7e9f5;
 }
 
 .home-container {
