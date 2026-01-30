@@ -42,9 +42,11 @@ public class TrackerService : ITrackerService
         float station = 0f;
         float accumulatedLength = 0f;
         var offsetPoint = lines.First().Start;
+        var currentLineIndex = 0;
 
-        foreach (var line in lines)
+        for (int i = 0; i < lines.Count; i++)
         {
+            var line = lines[i];
             var closestPoint = line.ClosestPoint(point);
             var distance = Vector2.Distance(point, closestPoint);
 
@@ -53,15 +55,16 @@ public class TrackerService : ITrackerService
                 minOffset = distance;
                 station = accumulatedLength + Vector2.Distance(line.Start, closestPoint);
                 offsetPoint = closestPoint;
+                currentLineIndex = i;
             }
 
             accumulatedLength += line.Length;
         }
 
-        return new StatusDTO(minOffset, station, new CoordinateDTO(offsetPoint.X, offsetPoint.Y));
+        return new StatusDTO(minOffset, station, new CoordinateDTO(offsetPoint.X, offsetPoint.Y), currentLineIndex);
     }
 
-    public async Task<StatusStatefulDTO> GetStatusStateful(CoordinateDTO coordinate)
+    public async Task<StatusDTO> GetStatusStateful(CoordinateDTO coordinate)
     {
         var coordinates = (await GetPathCoordinates()).ToArray();
 
@@ -92,7 +95,7 @@ public class TrackerService : ITrackerService
         // If it's the last line, no comparison needed
         if (currentLineIndex == lines.Count - 1)
         {
-            return new StatusStatefulDTO(
+            return new StatusDTO(
                 currentDistance,
                 currentStation,
                 new CoordinateDTO(currentClosestPoint.X, currentClosestPoint.Y),
@@ -113,14 +116,14 @@ public class TrackerService : ITrackerService
                 currentStation +
                 Vector2.Distance(nextLine.Start, nextClosestPoint);
 
-            return new StatusStatefulDTO(
+            return new StatusDTO(
                 nextDistance,
                 nextStation,
                 new CoordinateDTO(nextClosestPoint.X, nextClosestPoint.Y),
                 nextLineIndex);
         }
 
-        return new StatusStatefulDTO(
+        return new StatusDTO(
             currentDistance,
             currentStation,
             new CoordinateDTO(currentClosestPoint.X, currentClosestPoint.Y),

@@ -58,7 +58,7 @@ public class TrackerControllerTest
         var coordinate = new CoordinateDTO(10, 6);
         var lineIndex = 1;
 
-        var expected = new StatusStatefulDTO(
+        var expected = new StatusDTO(
             Offset: 2f,
             Station: 16f,
             ClosestPoint: new CoordinateDTO(10, 6),
