@@ -9,6 +9,7 @@
       <input matInput [(ngModel)]="userCoordinatesInput().y" placeholder="Placeholder" />
     </mat-form-field>
     <button filled matButton="outlined" (click)="handleUpdateLocation()">Update Location</button>
+    <button filled matButton="outlined" (click)="handleResetCurrentLine()">Reset Current Line</button>
   </div>
   <div class="cards-container">
     <p class="status-text">Offset: {{ status().offset | number }}</p>

@@ -34,27 +34,29 @@ export class Home implements OnInit {
   userCoordinatesInput = signal<Coordinate>({ x: 0, y: 0 });
   status = signal<Status>({});
 
+  handleResetCurrentLine() {
+    this.trackerService
+      .resetCurrentLine()
+      .pipe(
+        catchError((error) => {
+          console.error('Error resetting current line:', error);
+          throw error;
+        }),
+      )
+      .subscribe(() => {
+        console.log('Current line reset successfully.');
+        this.handleUpdateLocation();
+      });
+  }
+
   handleUpdateLocation() {
     this.userCoordinates.set({
       x: this.userCoordinatesInput().x,
       y: this.userCoordinatesInput().y,
     });
 
-    // this.trackerService
-    //   .getStatus(this.userCoordinates())
-    //   .pipe(
-    //     catchError((error) => {
-    //       console.error('Error fetching status:', error);
-    //       throw error;
-    //     }),
-    //   )
-    //   .subscribe((status) => {
-    //     console.log('Fetched status:', status);
-    //     this.status.set(status);
-    //   });
-
     this.trackerService
-      .getStatusStateful(this.userCoordinates())
+      .getStatus(this.userCoordinates())
       .pipe(
         catchError((error) => {
           console.error('Error fetching status:', error);
@@ -64,10 +66,6 @@ export class Home implements OnInit {
       .subscribe((status) => {
         console.log('Fetched status:', status);
         this.status.set(status);
-
-        if (status.currentLineIndex !== undefined) {
-          sessionStorage.setItem('currentLineIndex', status.currentLineIndex.toString());
-        }
       });
   }
 
@@ -84,8 +82,8 @@ export class Home implements OnInit {
         console.log('Fetched path coordinates:', coordinates);
         this.pathCoordinates.set(coordinates);
         this.userCoordinatesInput.set({ x: coordinates[0].x, y: coordinates[0].y });
-      });
 
-    this.handleUpdateLocation();
+        this.handleUpdateLocation();
+      });
   }
 }
