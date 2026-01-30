@@ -8,13 +8,14 @@ svg {
   font-family: sans-serif;
 }
 
-.offset-line {
+.path-polyline {
   stroke-dasharray: 10;
-  animation: dash-loop 5s linear infinite;
+  stroke-dashoffset: 200;
+  animation: dash-loop 4s linear infinite;
 }
 
 @keyframes dash-loop {
   to {
-    stroke-dashoffset: 200;
+    stroke-dashoffset: 0;
   }
 }

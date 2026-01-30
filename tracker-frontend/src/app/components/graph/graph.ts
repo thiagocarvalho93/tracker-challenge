@@ -23,6 +23,21 @@ export class Graph {
       .map((p) => `${p.x},${p.y}`)
       .join(' '),
   );
+  polylinePointsFilled = computed(() => {
+    const { currentLineIndex = 0, closestPoint } = this.status();
+    const path = this.pathCoordinates();
+
+    const sliceEnd = Math.max(currentLineIndex + 1, 1);
+    const previousPoints = path.slice(0, sliceEnd);
+
+    const polyline = previousPoints.map((p) => `${p.x},${p.y}`).join(' ');
+
+    if (!closestPoint) {
+      return polyline;
+    }
+
+    return `${polyline} ${closestPoint.x},${closestPoint.y}`;
+  });
   viewBox = computed(() => {
     const paddingX = 20;
     const paddingY = 10;

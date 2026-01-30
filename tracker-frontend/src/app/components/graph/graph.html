@@ -11,7 +11,16 @@
           stroke-dasharray="2.2"
           vector-effect="non-scaling-stroke"
         />
+
+        <polyline
+          [attr.points]="polylinePointsFilled()"
+          fill="none"
+          stroke="red"
+          stroke-linejoin="round"
+          class="path-polyline-filled"
+        />
       </g>
+
       <g class="axis">
         <line
           x1="0"
@@ -32,7 +41,9 @@
       </g>
 
       <g class="markers">
-        <circle [attr.cx]="startPoint().x" [attr.cy]="startPoint().y" r="1" fill="red" />
+        <circle [attr.cx]="startPoint().x" [attr.cy]="startPoint().y" r="1" fill="red">
+          <animate attributeName="r" values="1;2;1" dur="1.2s" repeatCount="indefinite" />
+        </circle>
         <text
           [attr.x]="startPoint().x + 2"
           [attr.y]="-startPoint().y"
@@ -43,7 +54,9 @@
           Start
         </text>
 
-        <circle [attr.cx]="endPoint().x" [attr.cy]="endPoint().y" r="1" fill="red" />
+        <circle [attr.cx]="endPoint().x" [attr.cy]="endPoint().y" r="1" fill="red">
+          <animate attributeName="r" values="1;2;1" dur="1.2s" repeatCount="indefinite" />
+        </circle>
         <text
           [attr.x]="endPoint().x + 2"
           [attr.y]="-endPoint().y"
