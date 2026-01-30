@@ -40,8 +40,21 @@ export class Home implements OnInit {
       y: this.userCoordinatesInput().y,
     });
 
+    // this.trackerService
+    //   .getStatus(this.userCoordinates())
+    //   .pipe(
+    //     catchError((error) => {
+    //       console.error('Error fetching status:', error);
+    //       throw error;
+    //     }),
+    //   )
+    //   .subscribe((status) => {
+    //     console.log('Fetched status:', status);
+    //     this.status.set(status);
+    //   });
+
     this.trackerService
-      .getStatus(this.userCoordinates())
+      .getStatusStateful(this.userCoordinates())
       .pipe(
         catchError((error) => {
           console.error('Error fetching status:', error);
@@ -51,6 +64,10 @@ export class Home implements OnInit {
       .subscribe((status) => {
         console.log('Fetched status:', status);
         this.status.set(status);
+
+        if (status.currentLineIndex !== undefined) {
+          sessionStorage.setItem('currentLineIndex', status.currentLineIndex.toString());
+        }
       });
   }
 

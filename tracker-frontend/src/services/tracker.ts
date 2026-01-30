@@ -22,4 +22,12 @@ export class TrackerService {
 
     return this.httpClient.get<Status>(url);
   }
+
+  getStatusStateful(coordinate: Coordinate): Observable<Status> {
+    const currentLineIndex = sessionStorage.getItem('currentLineIndex') || '0';
+
+    const url = `${BASE_URL}/status-stateful?x=${coordinate.x}&y=${coordinate.y}&lineIndex=${currentLineIndex}`;
+
+    return this.httpClient.get<Status>(url);
+  }
 }
