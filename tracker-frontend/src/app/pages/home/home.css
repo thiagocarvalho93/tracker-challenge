@@ -17,5 +17,14 @@
 }
 
 .status-text {
+  font-weight: 500;
   font-size: 18px;
+}
+
+.offset-text {
+  color: #1984c5;
+}
+
+.station-text {
+  color: #e14b31;
 }

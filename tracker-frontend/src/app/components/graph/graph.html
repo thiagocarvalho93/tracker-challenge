@@ -1,26 +1,6 @@
 <div class="graph-container">
   <svg #svgGraph [attr.viewBox]="viewBoxString()" preserveAspectRatio="xMidYMid meet">
     <g class="flip-y" [attr.transform]="flipTransform()">
-      <g class="path">
-        <polyline
-          [attr.points]="polylinePoints()"
-          fill="none"
-          stroke="red"
-          stroke-linejoin="round"
-          class="path-polyline"
-          stroke-dasharray="2.2"
-          vector-effect="non-scaling-stroke"
-        />
-
-        <polyline
-          [attr.points]="polylinePointsFilled()"
-          fill="none"
-          stroke="red"
-          stroke-linejoin="round"
-          class="path-polyline-filled"
-        />
-      </g>
-
       <g class="axis">
         <line
           x1="0"
@@ -39,9 +19,30 @@
           vector-effect="non-scaling-stroke"
         />
       </g>
+      <g class="path">
+        <polyline
+          [attr.points]="polylinePoints()"
+          fill="none"
+          stroke="black"
+          stroke-linejoin="round"
+          class="path-polyline"
+          stroke-dasharray="2.2"
+          vector-effect="non-scaling-stroke"
+        />
+
+        <polyline
+          [attr.points]="polylinePointsFilled()"
+          fill="none"
+          stroke="#e14b31"
+          stroke-linejoin="round"
+          class="path-polyline-filled"
+          vector-effect="non-scaling-stroke"
+          stroke-width="2"
+        />
+      </g>
 
       <g class="markers">
-        <circle [attr.cx]="startPoint().x" [attr.cy]="startPoint().y" r="1" fill="red">
+        <circle [attr.cx]="startPoint().x" [attr.cy]="startPoint().y" r="1" fill="#e14b31">
           <animate attributeName="r" values="1;2;1" dur="1.2s" repeatCount="indefinite" />
         </circle>
         <text
@@ -54,7 +55,7 @@
           Start
         </text>
 
-        <circle [attr.cx]="endPoint().x" [attr.cy]="endPoint().y" r="1" fill="red">
+        <circle [attr.cx]="endPoint().x" [attr.cy]="endPoint().y" r="1" fill="#e14b31">
           <animate attributeName="r" values="1;2;1" dur="1.2s" repeatCount="indefinite" />
         </circle>
         <text
@@ -68,12 +69,6 @@
         </text>
       </g>
 
-      <g class="current">
-        <circle [attr.cx]="currentLocation().x" [attr.cy]="currentLocation().y" r="1" fill="blue">
-          <animate attributeName="r" values="2;3;2" dur="1.2s" repeatCount="indefinite" />
-        </circle>
-      </g>
-
       <g class="offset">
         @if (status().closestPoint) {
           <line
@@ -82,10 +77,22 @@
             [attr.x2]="currentLocation().x"
             [attr.y2]="currentLocation().y"
             vector-effect="non-scaling-stroke"
-            stroke="blue"
+            stroke-width="2"
+            stroke="#1984c5"
             class="offset-line"
           />
         }
+      </g>
+
+      <g class="current">
+        <circle
+          [attr.cx]="currentLocation().x"
+          [attr.cy]="currentLocation().y"
+          r="1"
+          fill="#1984c5"
+        >
+          <animate attributeName="r" values="2;3;2" dur="1.2s" repeatCount="indefinite" />
+        </circle>
       </g>
     </g>
   </svg>

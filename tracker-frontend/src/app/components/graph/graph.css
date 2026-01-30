@@ -11,7 +11,7 @@ svg {
 .path-polyline {
   stroke-dasharray: 10;
   stroke-dashoffset: 200;
-  animation: dash-loop 4s linear infinite;
+  animation: dash-loop 6s linear infinite;
 }
 
 @keyframes dash-loop {
