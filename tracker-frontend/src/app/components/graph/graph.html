@@ -1,24 +1,7 @@
 <div class="graph-container">
   <svg #svgGraph [attr.viewBox]="viewBoxString()" preserveAspectRatio="xMidYMid meet">
     <g class="flip-y" [attr.transform]="flipTransform()">
-      <g class="axis">
-        <line
-          x1="0"
-          [attr.y1]="viewBox().minY - viewBox().height"
-          x2="0"
-          [attr.y2]="viewBox().maxY + viewBox().height"
-          stroke="gray"
-          vector-effect="non-scaling-stroke"
-        />
-        <line
-          [attr.x1]="viewBox().minX - viewBox().width"
-          y1="0"
-          [attr.x2]="viewBox().maxX + viewBox().width"
-          y2="0"
-          stroke="gray"
-          vector-effect="non-scaling-stroke"
-        />
-      </g>
+      <g class="grid"></g>
       <g class="path">
         <polyline
           [attr.points]="polylinePoints()"

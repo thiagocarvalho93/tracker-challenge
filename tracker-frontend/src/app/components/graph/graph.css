@@ -1,6 +1,6 @@
 svg {
-  width: calc(100vw - 10px);
-  height: calc(100vh - 150px);
+  width: calc(100vw - 80px);
+  height: calc(100vh - 220px);
 }
 .text {
   font-size: 5px;
