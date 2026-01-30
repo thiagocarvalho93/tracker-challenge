@@ -25,7 +25,8 @@ public class TrackerControllerTest
         var expected = new StatusDTO(
             Offset: 3f,
             Station: 5f,
-            ClosestPoint: new CoordinateDTO(5, 0));
+            ClosestPoint: new CoordinateDTO(5, 0),
+            CurrentLineIndex: 0);
 
         var serviceMock = new Mock<ITrackerService>();
         serviceMock
@@ -35,7 +36,7 @@ public class TrackerControllerTest
         var controller = CreateController(serviceMock);
 
         // Act
-        var result = await controller.GetStatusLess(coordinate);
+        var result = await controller.GetStatus(coordinate);
 
         // Assert
         var okResult = Assert.IsType<OkObjectResult>(result);
@@ -62,24 +63,24 @@ public class TrackerControllerTest
             Offset: 2f,
             Station: 16f,
             ClosestPoint: new CoordinateDTO(10, 6),
-            CurrentLineIndex: 1);
+            CurrentLineIndex: lineIndex);
 
         var serviceMock = new Mock<ITrackerService>();
         serviceMock
-            .Setup(s => s.GetStatusStateful(coordinate, lineIndex))
+            .Setup(s => s.GetStatus(coordinate))
             .ReturnsAsync(expected);
 
         var controller = CreateController(serviceMock);
 
         // Act
-        var result = await controller.GetStatusFul(coordinate, lineIndex);
+        var result = await controller.GetStatus(coordinate);
 
         // Assert
         var okResult = Assert.IsType<OkObjectResult>(result);
         Assert.Equal(expected, okResult.Value);
 
         serviceMock.Verify(
-            s => s.GetStatusStateful(coordinate, lineIndex),
+            s => s.GetStatus(coordinate),
             Times.Once);
     }
 

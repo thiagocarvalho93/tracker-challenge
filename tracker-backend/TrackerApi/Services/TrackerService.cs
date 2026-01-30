@@ -64,7 +64,7 @@ public class TrackerService : ITrackerService
         return new StatusDTO(minOffset, station, new CoordinateDTO(offsetPoint.X, offsetPoint.Y), currentLineIndex);
     }
 
-    public async Task<StatusDTO> GetStatusStateful(CoordinateDTO coordinate)
+    public async Task<StatusDTO> GetStatusWithLineTrack(CoordinateDTO coordinate)
     {
         var coordinates = (await GetPathCoordinates()).ToArray();
 

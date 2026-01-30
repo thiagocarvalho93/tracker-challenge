@@ -13,7 +13,7 @@ public class TrackerController(ITrackerService trackerService) : ControllerBase
     {
         if (trackLine)
         {
-            return Ok(await _trackerService.GetStatusStateful(coordinate));
+            return Ok(await _trackerService.GetStatusWithLineTrack(coordinate));
         }
         return Ok(await _trackerService.GetStatus(coordinate));
     }

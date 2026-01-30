@@ -11,6 +11,7 @@ namespace TrackerApi.Tests.Services;
 public class TrackerServiceTest
 {
     private readonly IOptions<PathSettings> _filePathOptions;
+    private readonly StateService _stateService;
 
     public TrackerServiceTest()
     {
@@ -18,6 +19,7 @@ public class TrackerServiceTest
         {
             FileName = "test.csv"
         });
+        _stateService = new StateService();
     }
     private static Mock<IPathRepository> CreateRepositoryMock(
         IEnumerable<CoordinateDTO> coordinates)
@@ -40,7 +42,7 @@ public class TrackerServiceTest
             new CoordinateDTO(0, 0)
         ]);
 
-        var service = new TrackerService(repoMock.Object, _filePathOptions);
+        var service = new TrackerService(repoMock.Object, _filePathOptions, _stateService);
 
         await Assert.ThrowsAsync<InvalidOperationException>(() =>
             service.GetStatus(new CoordinateDTO(1, 1)));
@@ -56,7 +58,7 @@ public class TrackerServiceTest
             new CoordinateDTO(10, 0)
         ]);
 
-        var service = new TrackerService(repoMock.Object, _filePathOptions);
+        var service = new TrackerService(repoMock.Object, _filePathOptions, _stateService);
 
         // Point above middle of line
         var result = await service.GetStatus(new CoordinateDTO(5, 3));
@@ -77,7 +79,7 @@ public class TrackerServiceTest
             new CoordinateDTO(10, 10)
         ]);
 
-        var service = new TrackerService(repoMock.Object, _filePathOptions);
+        var service = new TrackerService(repoMock.Object, _filePathOptions, _stateService);
 
         // Closer to vertical segment
         var result = await service.GetStatus(new CoordinateDTO(12, 6));
@@ -89,25 +91,24 @@ public class TrackerServiceTest
 
     #endregion
 
-    #region GetStatusStateful
+    #region GetStatusWithLineTrack
 
     [Fact]
-    public async Task GetStatusStateful_ShouldThrow_WhenLineIndexIsInvalid()
+    public async Task GetStatusWithLineTrack_ShouldThrow_WhenLineIndexIsInvalid()
     {
         var repoMock = CreateRepositoryMock(
         [
             new CoordinateDTO(0, 0),
-            new CoordinateDTO(10, 0)
         ]);
 
-        var service = new TrackerService(repoMock.Object, _filePathOptions);
+        var service = new TrackerService(repoMock.Object, _filePathOptions, _stateService);
 
-        await Assert.ThrowsAsync<ArgumentOutOfRangeException>(() =>
-            service.GetStatusStateful(new CoordinateDTO(5, 1), 2));
+        await Assert.ThrowsAsync<InvalidOperationException>(() =>
+            service.GetStatusWithLineTrack(new CoordinateDTO(5, 1)));
     }
 
     [Fact]
-    public async Task GetStatusStateful_ShouldReturnCurrentLine_WhenCloserThanNext()
+    public async Task GetStatusWithLineTrack_ShouldReturnCurrentLine_WhenCloserThanNext()
     {
         var repoMock = CreateRepositoryMock(
         [
@@ -116,11 +117,9 @@ public class TrackerServiceTest
             new CoordinateDTO(10, 10)
         ]);
 
-        var service = new TrackerService(repoMock.Object, _filePathOptions);
+        var service = new TrackerService(repoMock.Object, _filePathOptions, _stateService);
 
-        var result = await service.GetStatusStateful(
-            new CoordinateDTO(5, 2),
-            currentLineIndex: 0);
+        var result = await service.GetStatusWithLineTrack(new CoordinateDTO(5, 2));
 
         Assert.Equal(2f, result.Offset);
         Assert.Equal(5f, result.Station);
@@ -129,7 +128,7 @@ public class TrackerServiceTest
     }
 
     [Fact]
-    public async Task GetStatusStateful_ShouldSwitchToNextLine_WhenNextIsCloser()
+    public async Task GetStatusWithLineTrack_ShouldSwitchToNextLine_WhenNextIsCloser()
     {
         var repoMock = CreateRepositoryMock(
         [
@@ -138,11 +137,9 @@ public class TrackerServiceTest
             new CoordinateDTO(10, 10)
         ]);
 
-        var service = new TrackerService(repoMock.Object, _filePathOptions);
+        var service = new TrackerService(repoMock.Object, _filePathOptions, _stateService);
 
-        var result = await service.GetStatusStateful(
-            new CoordinateDTO(11, 6),
-            currentLineIndex: 0);
+        var result = await service.GetStatusWithLineTrack(new CoordinateDTO(11, 6));
 
         Assert.Equal(1f, result.Offset);
         Assert.Equal(16f, result.Station);
@@ -151,7 +148,7 @@ public class TrackerServiceTest
     }
 
     [Fact]
-    public async Task GetStatusStateful_ShouldNotCompareNext_WhenLastLine()
+    public async Task GetStatusWithLineTrack_ShouldNotCompareNext_WhenLastLine()
     {
         var repoMock = CreateRepositoryMock(
         [
@@ -160,11 +157,9 @@ public class TrackerServiceTest
             new CoordinateDTO(10, 10)
         ]);
 
-        var service = new TrackerService(repoMock.Object, _filePathOptions);
+        var service = new TrackerService(repoMock.Object, _filePathOptions, _stateService);
 
-        var result = await service.GetStatusStateful(
-            new CoordinateDTO(12, 8),
-            currentLineIndex: 1);
+        var result = await service.GetStatusWithLineTrack(new CoordinateDTO(12, 8));
 
         Assert.Equal(2f, result.Offset);
         Assert.Equal(18f, result.Station);
