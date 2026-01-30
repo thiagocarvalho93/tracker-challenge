@@ -1,54 +1,62 @@
+using System.Diagnostics.CodeAnalysis;
 using TrackerApi.Repositories;
 using TrackerApi.Repositories.Interfaces;
 using TrackerApi.Services;
 using TrackerApi.Services.Interfaces;
 using TrackerApi.Utils;
 
-var builder = WebApplication.CreateBuilder(args);
-
-// Add services to the container.
-
-builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-
-builder.Services.AddHttpsRedirection(options =>
+[ExcludeFromCodeCoverage]
+class Program
 {
-    options.HttpsPort = 443;
-});
+    static void Main(string[] args)
+    {
+        var builder = WebApplication.CreateBuilder(args);
 
-// DI
-builder.Services.AddScoped<ITrackerService, TrackerService>();
-builder.Services.AddScoped<IPathRepository, PathRepository>();
-builder.Services.Configure<PathSettings>(
-    builder.Configuration.GetSection("PathSettings"));
+        // Add services to the container.
 
-// CORS
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("AllowAllOrigins", policy =>
-        policy.AllowAnyOrigin()
-              .AllowAnyHeader()
-              .AllowAnyMethod());
-});
+        builder.Services.AddControllers();
+        // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+        builder.Services.AddEndpointsApiExplorer();
+        builder.Services.AddSwaggerGen();
 
-var app = builder.Build();
+        builder.Services.AddHttpsRedirection(options =>
+        {
+            options.HttpsPort = 443;
+        });
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
+        // DI
+        builder.Services.AddScoped<ITrackerService, TrackerService>();
+        builder.Services.AddScoped<IPathRepository, PathRepository>();
+        builder.Services.Configure<PathSettings>(
+            builder.Configuration.GetSection("PathSettings"));
+
+        // CORS
+        builder.Services.AddCors(options =>
+        {
+            options.AddPolicy("AllowAllOrigins", policy =>
+                policy.AllowAnyOrigin()
+                      .AllowAnyHeader()
+                      .AllowAnyMethod());
+        });
+
+        var app = builder.Build();
+
+        // Configure the HTTP request pipeline.
+        if (app.Environment.IsDevelopment())
+        {
+            app.UseSwagger();
+            app.UseSwaggerUI();
+        }
+
+
+        app.UseCors("AllowAllOrigins");
+
+        // app.UseHttpsRedirection();
+
+        app.UseAuthorization();
+
+        app.MapControllers();
+
+        app.Run();
+    }
 }
-
-
-app.UseCors("AllowAllOrigins");
-
-// app.UseHttpsRedirection();
-
-app.UseAuthorization();
-
-app.MapControllers();
-
-app.Run();
