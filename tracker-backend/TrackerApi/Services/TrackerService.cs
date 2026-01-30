@@ -1,5 +1,5 @@
 using System.Numerics;
-using TrackerApi.Models;
+using TrackerApi.DTOs;
 using TrackerApi.Repositories.Interfaces;
 using TrackerApi.Services.Interfaces;
 using TrackerApi.ValueObjects;
@@ -10,7 +10,7 @@ public class TrackerService(IPathRepository pathRepository) : ITrackerService
 {
     private readonly IPathRepository _pathRepository = pathRepository;
 
-    public async Task<Status> GetStatus(Coordinate coordinate)
+    public async Task<StatusDTO> GetStatus(CoordinateDTO coordinate)
     {
         var coordinates = (await GetPathCoordinates()).ToArray();
 
@@ -41,10 +41,10 @@ public class TrackerService(IPathRepository pathRepository) : ITrackerService
             accumulatedLength += line.Length;
         }
 
-        return new Status(minOffset, station, new Coordinate(offsetPoint.X, offsetPoint.Y));
+        return new StatusDTO(minOffset, station, new CoordinateDTO(offsetPoint.X, offsetPoint.Y));
     }
 
-    public async Task<StatusStatefulResponseDTO> GetStatusStateful(Coordinate coordinate, int currentLineIndex)
+    public async Task<StatusStatefulDTO> GetStatusStateful(CoordinateDTO coordinate, int currentLineIndex)
     {
         var coordinates = (await GetPathCoordinates()).ToArray();
 
@@ -74,10 +74,10 @@ public class TrackerService(IPathRepository pathRepository) : ITrackerService
         // If it's the last line, no comparison needed
         if (currentLineIndex == lines.Count - 1)
         {
-            return new StatusStatefulResponseDTO(
+            return new StatusStatefulDTO(
                 currentDistance,
                 currentStation,
-                new Coordinate(currentClosestPoint.X, currentClosestPoint.Y),
+                new CoordinateDTO(currentClosestPoint.X, currentClosestPoint.Y),
                 currentLineIndex);
         }
 
@@ -93,21 +93,21 @@ public class TrackerService(IPathRepository pathRepository) : ITrackerService
                 currentStation +
                 Vector2.Distance(nextLine.Start, nextClosestPoint);
 
-            return new StatusStatefulResponseDTO(
+            return new StatusStatefulDTO(
                 nextDistance,
                 nextStation,
-                new Coordinate(nextClosestPoint.X, nextClosestPoint.Y),
+                new CoordinateDTO(nextClosestPoint.X, nextClosestPoint.Y),
                 nextLineIndex);
         }
 
-        return new StatusStatefulResponseDTO(
+        return new StatusStatefulDTO(
             currentDistance,
             currentStation,
-            new Coordinate(currentClosestPoint.X, currentClosestPoint.Y),
+            new CoordinateDTO(currentClosestPoint.X, currentClosestPoint.Y),
             currentLineIndex);
     }
 
-    public async Task<IEnumerable<Coordinate>> GetPathCoordinates()
+    public async Task<IEnumerable<CoordinateDTO>> GetPathCoordinates()
     {
         return await _pathRepository.GetPathCoordinates("polyline sample.csv");
     }

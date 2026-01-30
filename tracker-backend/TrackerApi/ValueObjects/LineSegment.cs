@@ -1,5 +1,5 @@
 using System.Numerics;
-using TrackerApi.Models;
+using TrackerApi.DTOs;
 
 namespace TrackerApi.ValueObjects;
 
@@ -17,7 +17,7 @@ public class LineSegment
         End = end;
     }
 
-    public LineSegment(Coordinate start, Coordinate end)
+    public LineSegment(CoordinateDTO start, CoordinateDTO end)
     {
         Start = new Vector2(start.X, start.Y);
         End = new Vector2(end.X, end.Y);
@@ -70,7 +70,7 @@ public class LineSegment
     /// </summary>
     /// <param name="coordinates">A collection of coordinates</param>
     /// <returns></returns>
-    public static List<LineSegment> GetLinesFromCoordinates(IEnumerable<Coordinate> coordinates)
+    public static List<LineSegment> GetLinesFromCoordinates(IEnumerable<CoordinateDTO> coordinates)
     {
         ArgumentNullException.ThrowIfNull(coordinates);
 

@@ -1,3 +1,4 @@
+using TrackerApi.DTOs;
 using TrackerApi.Models;
 using TrackerApi.Repositories;
 
@@ -37,9 +38,9 @@ public class PathRepositoryTests : IDisposable
 
         // Assert
         Assert.Equal(3, result.Count);
-        Assert.Equal(new Coordinate(10, 20), result[0]);
-        Assert.Equal(new Coordinate(30, 40), result[1]);
-        Assert.Equal(new Coordinate(50, 60), result[2]);
+        Assert.Equal(new CoordinateDTO(10, 20), result[0]);
+        Assert.Equal(new CoordinateDTO(30, 40), result[1]);
+        Assert.Equal(new CoordinateDTO(50, 60), result[2]);
     }
 
     [Fact]
@@ -62,8 +63,8 @@ public class PathRepositoryTests : IDisposable
 
         // Assert
         Assert.Equal(2, result.Count);
-        Assert.Equal(new Coordinate(1, 2), result[0]);
-        Assert.Equal(new Coordinate(3, 4), result[1]);
+        Assert.Equal(new CoordinateDTO(1, 2), result[0]);
+        Assert.Equal(new CoordinateDTO(3, 4), result[1]);
     }
 
     [Fact]

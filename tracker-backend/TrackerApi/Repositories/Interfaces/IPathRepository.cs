@@ -1,8 +1,8 @@
-using TrackerApi.Models;
+using TrackerApi.DTOs;
 
 namespace TrackerApi.Repositories.Interfaces;
 
 public interface IPathRepository
 {
-    Task<IEnumerable<Coordinate>> GetPathCoordinates(string fileName);
+    Task<IEnumerable<CoordinateDTO>> GetPathCoordinates(string fileName);
 }

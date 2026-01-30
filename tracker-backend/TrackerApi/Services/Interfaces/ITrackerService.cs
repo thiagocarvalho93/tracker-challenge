@@ -1,10 +1,10 @@
-using TrackerApi.Models;
+using TrackerApi.DTOs;
 
 namespace TrackerApi.Services.Interfaces;
 
 public interface ITrackerService
 {
-    Task<Status> GetStatus(Coordinate coordinate);
-    Task<StatusStatefulResponseDTO> GetStatusStateful(Coordinate coordinate, int currentLineIndex);
-    Task<IEnumerable<Coordinate>> GetPathCoordinates();
+    Task<StatusDTO> GetStatus(CoordinateDTO coordinate);
+    Task<StatusStatefulDTO> GetStatusStateful(CoordinateDTO coordinate, int currentLineIndex);
+    Task<IEnumerable<CoordinateDTO>> GetPathCoordinates();
 }
