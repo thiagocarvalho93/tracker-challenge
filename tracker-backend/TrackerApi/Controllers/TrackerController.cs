@@ -9,13 +9,13 @@ public class TrackerController(ITrackerService trackerService) : ControllerBase
     private readonly ITrackerService _trackerService = trackerService;
 
     [HttpGet("status")]
-    public async Task<IActionResult> GetStatusLess([FromQuery] CoordinateDTO coordinate)
+    public async Task<IActionResult> GetStatusStateless([FromQuery] CoordinateDTO coordinate)
     {
         return Ok(await _trackerService.GetStatus(coordinate));
     }
 
     [HttpGet("status-stateful")]
-    public async Task<IActionResult> GetStatusFul([FromQuery] CoordinateDTO coordinate, [FromQuery] int lineIndex)
+    public async Task<IActionResult> GetStatusStatefull([FromQuery] CoordinateDTO coordinate, [FromQuery] int lineIndex)
     {
         return Ok(await _trackerService.GetStatusStateful(coordinate, lineIndex));
     }
