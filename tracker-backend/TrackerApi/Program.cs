@@ -2,6 +2,7 @@ using TrackerApi.Repositories;
 using TrackerApi.Repositories.Interfaces;
 using TrackerApi.Services;
 using TrackerApi.Services.Interfaces;
+using TrackerApi.Utils;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,6 +21,8 @@ builder.Services.AddHttpsRedirection(options =>
 // DI
 builder.Services.AddScoped<ITrackerService, TrackerService>();
 builder.Services.AddScoped<IPathRepository, PathRepository>();
+builder.Services.Configure<PathSettings>(
+    builder.Configuration.GetSection("PathSettings"));
 
 // CORS
 builder.Services.AddCors(options =>

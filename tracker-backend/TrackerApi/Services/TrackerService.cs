@@ -1,14 +1,28 @@
 using System.Numerics;
+using Microsoft.Extensions.Options;
 using TrackerApi.DTOs;
 using TrackerApi.Repositories.Interfaces;
 using TrackerApi.Services.Interfaces;
+using TrackerApi.Utils;
 using TrackerApi.ValueObjects;
 
 namespace TrackerApi.Services;
 
-public class TrackerService(IPathRepository pathRepository) : ITrackerService
+public class TrackerService : ITrackerService
 {
-    private readonly IPathRepository _pathRepository = pathRepository;
+    private readonly IPathRepository _pathRepository;
+    private readonly string _fileName;
+
+    public TrackerService(
+        IPathRepository pathRepository,
+        IOptions<PathSettings> options)
+    {
+        _pathRepository = pathRepository;
+        _fileName = options.Value.FileName;
+
+        if (string.IsNullOrWhiteSpace(_fileName))
+            throw new InvalidOperationException("Path file name is not configured.");
+    }
 
     public async Task<StatusDTO> GetStatus(CoordinateDTO coordinate)
     {
@@ -109,6 +123,6 @@ public class TrackerService(IPathRepository pathRepository) : ITrackerService
 
     public async Task<IEnumerable<CoordinateDTO>> GetPathCoordinates()
     {
-        return await _pathRepository.GetPathCoordinates("polyline sample.csv");
+        return await _pathRepository.GetPathCoordinates(_fileName);
     }
 }
