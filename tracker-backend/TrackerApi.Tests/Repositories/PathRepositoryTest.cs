@@ -1,15 +1,14 @@
 using TrackerApi.DTOs;
-using TrackerApi.Models;
 using TrackerApi.Repositories;
 
 namespace TrackerApi.Tests.Repositories;
 
-public class PathRepositoryTests : IDisposable
+public class PathRepositoryTest : IDisposable
 {
     private readonly string _dataDirectory;
     private readonly List<string> _createdFiles = [];
 
-    public PathRepositoryTests()
+    public PathRepositoryTest()
     {
         _dataDirectory = Path.Combine(Directory.GetCurrentDirectory(), "Data");
 
