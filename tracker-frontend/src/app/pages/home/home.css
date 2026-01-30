@@ -28,3 +28,12 @@
 .station-text {
   color: #e14b31;
 }
+
+.form-card {
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.home-container {
+  padding: 20px;
+}

@@ -8,10 +8,10 @@ import { Status } from '../../models/status.type';
 import { DecimalPipe } from '@angular/common';
 import { MatButton } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatCardModule } from '@angular/material/card';
 
 @Component({
   selector: 'app-home',
@@ -21,10 +21,10 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
     DecimalPipe,
     MatButton,
     MatFormFieldModule,
-    MatIconModule,
     MatInputModule,
     MatDividerModule,
     MatCheckboxModule,
+    MatCardModule,
   ],
   templateUrl: './home.html',
   styleUrl: './home.css',
@@ -36,6 +36,7 @@ export class Home implements OnInit {
   userCoordinatesInput = signal<Coordinate>({ x: 0, y: 0 });
   status = signal<Status>({});
   trackCurrentLine = signal<boolean>(false);
+  loading = signal<boolean>(false);
 
   handleResetCurrentLine() {
     this.trackerService
@@ -53,48 +54,48 @@ export class Home implements OnInit {
   }
 
   handleUpdateLocation() {
-    this.userCoordinates.set({
-      x: this.userCoordinatesInput().x,
-      y: this.userCoordinatesInput().y,
-    });
+    const { x, y } = this.userCoordinatesInput();
+    this.userCoordinates.set({ x, y });
+    this.loading.set(true);
 
     this.trackerService
       .getStatus(this.userCoordinates(), this.trackCurrentLine())
       .pipe(
         catchError((error) => {
           console.error('Error fetching status:', error);
+          this.loading.set(false);
           throw error;
         }),
       )
       .subscribe((status) => {
         console.log('Fetched status:', status);
         this.status.set(status);
+        this.loading.set(false);
       });
   }
 
   handleKeyDown(event?: KeyboardEvent) {
-    if (event && !'0123456789'.includes(event.key)) {
-      event.preventDefault();
-    }
     if (event && event.key === 'Enter') {
       this.handleUpdateLocation();
     }
   }
 
   ngOnInit(): void {
+    this.loading.set(true);
     this.trackerService
       .getPathCoordinates()
       .pipe(
         catchError((error) => {
           console.error('Error fetching path coordinates:', error);
+          this.loading.set(false);
           throw error;
         }),
       )
       .subscribe((coordinates) => {
         console.log('Fetched path coordinates:', coordinates);
         this.pathCoordinates.set(coordinates);
-        this.userCoordinatesInput.set({ x: coordinates[0].x, y: coordinates[0].y });
-
+        const { x, y } = coordinates[0];
+        this.userCoordinatesInput.set({ x, y });
         this.handleUpdateLocation();
       });
   }

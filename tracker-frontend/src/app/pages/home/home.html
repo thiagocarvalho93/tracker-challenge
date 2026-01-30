@@ -1,31 +1,49 @@
 <div class="home-container">
-  <div class="form-container">
-    <mat-form-field appearance="outline">
-      <mat-label>X coordinates</mat-label>
-      <input matInput [(ngModel)]="userCoordinatesInput().x" (keydown)="handleKeyDown($event)" placeholder="Placeholder" />
-    </mat-form-field>
-    <mat-form-field appearance="outline">
-      <mat-label>Y coordinates</mat-label>
-      <input matInput [(ngModel)]="userCoordinatesInput().y" (keydown)="handleKeyDown($event)" placeholder="Placeholder" />
-    </mat-form-field>
-    <button filled matButton="outlined" (click)="handleUpdateLocation()">Update Location</button>
-    <button filled matButton="outlined" [disabled]="!trackCurrentLine()" (click)="handleResetCurrentLine()">
-      Reset Current Line
-    </button>
-    <mat-checkbox [checked]="trackCurrentLine()" (change)="trackCurrentLine.set($event.checked)">
-      Track Line
-    </mat-checkbox>
-  </div>
-  <div class="cards-container">
-    <p class="status-text offset-text">Offset: {{ status().offset | number }}</p>
-    <p class="status-text station-text">Station: {{ status().station | number }}</p>
-  </div>
-  <mat-divider></mat-divider>
-  <div class="graph-container">
-    <app-graph
-      [currentLocation]="userCoordinates()"
-      [pathCoordinates]="pathCoordinates()"
-      [status]="status()"
-    />
-  </div>
+  <mat-card appearance="outlined" class="form-card">
+    <div class="form-container">
+      <mat-form-field appearance="outline">
+        <mat-label>X coordinates</mat-label>
+        <input
+          matInput
+          [(ngModel)]="userCoordinatesInput().x"
+          (keydown)="handleKeyDown($event)"
+          placeholder="Placeholder"
+        />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Y coordinates</mat-label>
+        <input
+          matInput
+          [(ngModel)]="userCoordinatesInput().y"
+          (keydown)="handleKeyDown($event)"
+          placeholder="Placeholder"
+        />
+      </mat-form-field>
+      <button filled matButton="outlined" (click)="handleUpdateLocation()">Update Location</button>
+      <button
+        filled
+        matButton="outlined"
+        [disabled]="!trackCurrentLine()"
+        (click)="handleResetCurrentLine()"
+      >
+        Reset Current Line
+      </button>
+      <mat-checkbox [checked]="trackCurrentLine()" (change)="trackCurrentLine.set($event.checked)">
+        Track Line
+      </mat-checkbox>
+    </div>
+    <div class="cards-container">
+      <p class="status-text offset-text">Offset: {{ status().offset | number }}</p>
+      <p class="status-text station-text">Station: {{ status().station | number }}</p>
+    </div>
+  </mat-card>
+  <mat-card appearance="outlined" class="form-card">
+    <div class="graph-container">
+      <app-graph
+        [currentLocation]="userCoordinates()"
+        [pathCoordinates]="pathCoordinates()"
+        [status]="status()"
+      />
+    </div>
+  </mat-card>
 </div>
