@@ -4,16 +4,16 @@ namespace TrackerApi.Services;
 
 public class StateService : IStateService
 {
-    private int _currentLine = 0;
+    private int _currentLineIndex = 0;
     private readonly object _lock = new();
 
-    public int GetCurrentLine => _currentLine;
+    public int GetCurrentLineIndex => _currentLineIndex;
 
     public void ResetCurrentLine()
     {
         lock (_lock)
         {
-            _currentLine = 0;
+            _currentLineIndex = 0;
         }
     }
 
@@ -21,7 +21,7 @@ public class StateService : IStateService
     {
         lock (_lock)
         {
-            _currentLine++;
+            _currentLineIndex++;
         }
     }
 }

@@ -11,14 +11,17 @@ namespace TrackerApi.Services;
 public class TrackerService : ITrackerService
 {
     private readonly IPathRepository _pathRepository;
+    private readonly IStateService _stateService;
     private readonly string _fileName;
 
     public TrackerService(
         IPathRepository pathRepository,
-        IOptions<PathSettings> options)
+        IOptions<PathSettings> options,
+        IStateService stateService)
     {
         _pathRepository = pathRepository;
         _fileName = options.Value.FileName;
+        _stateService = stateService;
 
         if (string.IsNullOrWhiteSpace(_fileName))
             throw new InvalidOperationException("Path file name is not configured.");
@@ -58,7 +61,7 @@ public class TrackerService : ITrackerService
         return new StatusDTO(minOffset, station, new CoordinateDTO(offsetPoint.X, offsetPoint.Y));
     }
 
-    public async Task<StatusStatefulDTO> GetStatusStateful(CoordinateDTO coordinate, int currentLineIndex)
+    public async Task<StatusStatefulDTO> GetStatusStateful(CoordinateDTO coordinate)
     {
         var coordinates = (await GetPathCoordinates()).ToArray();
 
@@ -66,6 +69,7 @@ public class TrackerService : ITrackerService
             throw new InvalidOperationException("Path must contain at least two coordinates.");
 
         var lines = LineSegment.GetLinesFromCoordinates(coordinates);
+        var currentLineIndex = _stateService.GetCurrentLineIndex;
 
         if (currentLineIndex < 0 || currentLineIndex >= lines.Count)
             throw new ArgumentOutOfRangeException(nameof(currentLineIndex));
@@ -103,6 +107,8 @@ public class TrackerService : ITrackerService
 
         if (nextDistance <= currentDistance)
         {
+            _stateService.SetNextCurrentLine();
+
             var nextStation =
                 currentStation +
                 Vector2.Distance(nextLine.Start, nextClosestPoint);

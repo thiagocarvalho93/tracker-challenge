@@ -2,7 +2,7 @@ namespace TrackerApi.Services.Interfaces;
 
 public interface IStateService
 {
-    int GetCurrentLine { get; }
+    int GetCurrentLineIndex { get; }
     void SetNextCurrentLine();
     void ResetCurrentLine();
 }
