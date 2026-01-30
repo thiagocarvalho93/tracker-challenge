@@ -1,8 +1,8 @@
-using System.Collections;
 using System.Numerics;
 using TrackerApi.Models;
 using TrackerApi.Repositories.Interfaces;
 using TrackerApi.Services.Interfaces;
+using TrackerApi.ValueObjects;
 
 namespace TrackerApi.Services;
 
@@ -109,6 +109,6 @@ public class TrackerService(IPathRepository pathRepository) : ITrackerService
 
     public async Task<IEnumerable<Coordinate>> GetPathCoordinates()
     {
-        return await _pathRepository.GetPathCoordinates();
+        return await _pathRepository.GetPathCoordinates("polyline sample.csv");
     }
 }

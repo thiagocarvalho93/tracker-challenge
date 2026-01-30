@@ -6,9 +6,9 @@ namespace TrackerApi.Repositories;
 
 public class PathRepository : IPathRepository
 {
-    public async Task<IEnumerable<Coordinate>> GetPathCoordinates()
+    public async Task<IEnumerable<Coordinate>> GetPathCoordinates(string fileName)
     {
-        string[] lines = await ReadFileAsync();
+        string[] lines = await ReadFileAsync(fileName);
 
         List<Coordinate> coordinates = MapLinesToCoordinates(lines);
 
@@ -30,12 +30,12 @@ public class PathRepository : IPathRepository
                     .ToList();
     }
 
-    private static async Task<string[]> ReadFileAsync()
+    private static async Task<string[]> ReadFileAsync(string fileName)
     {
         var filePath = Path.Combine(
                     Directory.GetCurrentDirectory(),
                     "Data",
-                    "polyline sample.csv"
+                    fileName
                 );
 
         if (!File.Exists(filePath))
