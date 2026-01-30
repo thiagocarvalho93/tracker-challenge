@@ -2,11 +2,11 @@
   <div class="form-container">
     <mat-form-field appearance="outline">
       <mat-label>X coordinates</mat-label>
-      <input matInput [(ngModel)]="userCoordinatesInput().x" placeholder="Placeholder" />
+      <input matInput [(ngModel)]="userCoordinatesInput().x" (keydown)="handleKeyDown($event)" placeholder="Placeholder" />
     </mat-form-field>
     <mat-form-field appearance="outline">
       <mat-label>Y coordinates</mat-label>
-      <input matInput [(ngModel)]="userCoordinatesInput().y" placeholder="Placeholder" />
+      <input matInput [(ngModel)]="userCoordinatesInput().y" (keydown)="handleKeyDown($event)" placeholder="Placeholder" />
     </mat-form-field>
     <button filled matButton="outlined" (click)="handleUpdateLocation()">Update Location</button>
     <button filled matButton="outlined" (click)="handleResetCurrentLine()">

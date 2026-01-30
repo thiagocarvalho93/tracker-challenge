@@ -72,6 +72,15 @@ export class Home implements OnInit {
       });
   }
 
+  handleKeyDown(event?: KeyboardEvent) {
+    if (event && !'0123456789'.includes(event.key)) {
+      event.preventDefault();
+    }
+    if (event && event.key === 'Enter') {
+      this.handleUpdateLocation();
+    }
+  }
+
   ngOnInit(): void {
     this.trackerService
       .getPathCoordinates()
