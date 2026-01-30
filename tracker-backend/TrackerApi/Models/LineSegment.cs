@@ -41,23 +41,6 @@ public class LineSegment
     public float LengthSquared => Vector2.DistanceSquared(Start, End);
 
     /// <summary>
-    /// Slope (null for vertical lines)
-    /// </summary>
-    public float? Slope
-    {
-        get
-        {
-            if (End.X == Start.X)
-                return null;
-
-            var dy = End.Y - Start.Y;
-            var dx = End.X - Start.X;
-
-            return dy / dx;
-        }
-    }
-
-    /// <summary>
     /// Closest point on the segment to an external point
     /// </summary>
     public Vector2 ClosestPoint(Vector2 p)

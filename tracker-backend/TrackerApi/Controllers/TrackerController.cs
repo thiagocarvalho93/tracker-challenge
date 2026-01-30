@@ -9,9 +9,15 @@ public class TrackerController(ITrackerService trackerService) : ControllerBase
     private readonly ITrackerService _trackerService = trackerService;
 
     [HttpGet("status")]
-    public async Task<IActionResult> GetStatus([FromQuery] Coordinate coordinate)
+    public async Task<IActionResult> GetStatusLess([FromQuery] Coordinate coordinate)
     {
         return Ok(await _trackerService.GetStatus(coordinate));
+    }
+
+    [HttpGet("status-stateful")]
+    public async Task<IActionResult> GetStatusFul([FromQuery] Coordinate coordinate, [FromQuery] int lineIndex)
+    {
+        return Ok(await _trackerService.GetStatusStateful(coordinate, lineIndex));
     }
 
     [HttpGet("path")]
