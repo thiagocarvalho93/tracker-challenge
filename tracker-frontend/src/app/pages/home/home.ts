@@ -1,8 +1,8 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { Graph } from '../../components/graph/graph';
-import { TrackerService } from '../../../services/tracker';
+import { TrackerApiService } from '../../../services/tracker-api';
 import { Coordinate } from '../../models/coordinate.type';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { catchError } from 'rxjs';
 import { Status } from '../../models/status.type';
 import { DecimalPipe } from '@angular/common';
@@ -12,6 +12,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatCardModule } from '@angular/material/card';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-home',
@@ -25,21 +26,28 @@ import { MatCardModule } from '@angular/material/card';
     MatDividerModule,
     MatCheckboxModule,
     MatCardModule,
+    ReactiveFormsModule,
+    CommonModule,
   ],
   templateUrl: './home.html',
   styleUrl: './home.css',
 })
 export class Home implements OnInit {
-  trackerService = inject(TrackerService);
+  fb = inject(FormBuilder);
+  trackerApiService = inject(TrackerApiService);
+
+  coordinateForm = this.fb.group({
+    x: [0, [Validators.required, Validators.pattern(/^-?\d+(\.\d+)?$/)]],
+    y: [0, [Validators.required, Validators.pattern(/^-?\d+(\.\d+)?$/)]],
+  });
   pathCoordinates = signal<Array<Coordinate>>([]);
   userCoordinates = signal<Coordinate>({ x: 0, y: 0 });
-  userCoordinatesInput = signal<Coordinate>({ x: 0, y: 0 });
   status = signal<Status>({});
   trackCurrentLine = signal<boolean>(false);
   loading = signal<boolean>(false);
 
   handleResetCurrentLine() {
-    this.trackerService
+    this.trackerApiService
       .resetCurrentLine()
       .pipe(
         catchError((error) => {
@@ -54,11 +62,17 @@ export class Home implements OnInit {
   }
 
   handleUpdateLocation() {
-    const { x, y } = this.userCoordinatesInput();
+    if (this.coordinateForm.invalid) {
+      this.coordinateForm.markAllAsTouched();
+      return;
+    }
+
+    const { x, y } = this.coordinateForm.value as Coordinate;
+
     this.userCoordinates.set({ x, y });
     this.loading.set(true);
 
-    this.trackerService
+    this.trackerApiService
       .getStatus(this.userCoordinates(), this.trackCurrentLine())
       .pipe(
         catchError((error) => {
@@ -68,7 +82,6 @@ export class Home implements OnInit {
         }),
       )
       .subscribe((status) => {
-        console.log('Fetched status:', status);
         this.status.set(status);
         this.loading.set(false);
       });
@@ -82,7 +95,7 @@ export class Home implements OnInit {
 
   ngOnInit(): void {
     this.loading.set(true);
-    this.trackerService
+    this.trackerApiService
       .getPathCoordinates()
       .pipe(
         catchError((error) => {
@@ -95,7 +108,7 @@ export class Home implements OnInit {
         console.log('Fetched path coordinates:', coordinates);
         this.pathCoordinates.set(coordinates);
         const { x, y } = coordinates[0];
-        this.userCoordinatesInput.set({ x, y });
+        this.coordinateForm.setValue({ x, y });
         this.handleUpdateLocation();
       });
   }

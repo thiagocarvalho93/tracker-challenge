@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root',
 })
-export class TrackerService {
+export class TrackerApiService {
   httpClient = inject(HttpClient);
 
   getPathCoordinates(): Observable<Coordinate[]> {

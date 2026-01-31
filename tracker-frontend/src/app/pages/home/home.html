@@ -1,25 +1,42 @@
 <div class="home-container">
   <mat-card appearance="outlined" class="form-card">
     <div class="form-container">
-      <mat-form-field appearance="outline">
-        <mat-label>X coordinates</mat-label>
-        <input
-          matInput
-          [(ngModel)]="userCoordinatesInput().x"
-          (keydown)="handleKeyDown($event)"
-          placeholder="Placeholder"
-        />
-      </mat-form-field>
-      <mat-form-field appearance="outline">
-        <mat-label>Y coordinates</mat-label>
-        <input
-          matInput
-          [(ngModel)]="userCoordinatesInput().y"
-          (keydown)="handleKeyDown($event)"
-          placeholder="Placeholder"
-        />
-      </mat-form-field>
-      <button filled matButton="outlined" (click)="handleUpdateLocation()">Update Location</button>
+      <form [formGroup]="coordinateForm" class="form-container">
+        <mat-form-field appearance="outline">
+          <mat-label>X</mat-label>
+          <input matInput formControlName="x" type="number" />
+
+          @if (coordinateForm.get('x')?.hasError('required')) {
+            <mat-error>X is required</mat-error>
+          }
+
+          @if (coordinateForm.get('x')?.hasError('pattern')) {
+            <mat-error> X must be a number </mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Y</mat-label>
+          <input matInput formControlName="y" type="number" />
+
+          @if (coordinateForm.get('y')?.hasError('required')) {
+            <mat-error>Y is required</mat-error>
+          }
+
+          @if (coordinateForm.get('y')?.hasError('pattern')) {
+            <mat-error>Y must be a number</mat-error>
+          }
+        </mat-form-field>
+
+        <button
+          matButton="outlined"
+          color="primary"
+          (click)="handleUpdateLocation()"
+          [disabled]="coordinateForm.invalid || loading()"
+        >
+          Update location
+        </button>
+      </form>
       <button
         filled
         matButton="outlined"
