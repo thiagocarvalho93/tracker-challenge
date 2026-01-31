@@ -36,7 +36,7 @@ public class TrackerService : ITrackerService
 
         var lines = LineSegment.GetLinesFromCoordinates(coordinates);
 
-        var point = new Vector2(coordinate.X, coordinate.Y);
+        var point = new Vector2(coordinate.X  ?? 0f, coordinate.Y  ?? 0f);
 
         float minOffset = float.MaxValue;
         float station = 0f;
@@ -77,7 +77,7 @@ public class TrackerService : ITrackerService
         if (currentLineIndex < 0 || currentLineIndex >= lines.Count)
             throw new ArgumentOutOfRangeException(nameof(currentLineIndex));
 
-        var point = new Vector2(coordinate.X, coordinate.Y);
+        var point = new Vector2(coordinate.X  ?? 0f, coordinate.Y  ?? 0f);
 
         // Current line calculations
         var currentLine = lines[currentLineIndex];

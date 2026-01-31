@@ -19,8 +19,8 @@ public class LineSegment
 
     public LineSegment(CoordinateDTO start, CoordinateDTO end)
     {
-        Start = new Vector2(start.X, start.Y);
-        End = new Vector2(end.X, end.Y);
+        Start = new Vector2(start.X ?? 0f, start.Y ?? 0f);
+        End = new Vector2(end.X ?? 0f, end.Y ?? 0f);
 
         if (Start == End)
             throw new ArgumentException("A line segment cannot have zero length.");
