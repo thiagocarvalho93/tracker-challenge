@@ -5,6 +5,7 @@ using TrackerApi.Services.Interfaces;
 namespace TrackerApi.Controllers;
 
 [ApiController]
+[Route("api")]
 public class TrackerController(ITrackerService trackerService) : ControllerBase
 {
     private readonly ITrackerService _trackerService = trackerService;

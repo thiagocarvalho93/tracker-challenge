@@ -23,6 +23,8 @@ public static class WebApplicationExtensions
         app.UseAuthorization();
 
         app.MapControllers();
+        app.UseStaticFiles();
+        app.MapFallbackToFile("index.html");
 
         return app;
     }
