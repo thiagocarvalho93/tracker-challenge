@@ -18,7 +18,12 @@ export class TrackerApiService {
   }
 
   getStatus(coordinate: Coordinate, trackLine: boolean = false): Observable<Status> {
-    const url = `${BASE_URL}/status?x=${coordinate.x}&y=${coordinate.y}&trackLine=${trackLine}`;
+    let currentLineIndex = '0';
+
+    if (trackLine) {
+      currentLineIndex = localStorage.getItem('currentLineIndex') || '0';
+    }
+    const url = `${BASE_URL}/status?x=${coordinate.x}&y=${coordinate.y}&trackLine=${trackLine}&currentLineIndex=${currentLineIndex}`;
 
     return this.httpClient.get<Status>(url);
   }

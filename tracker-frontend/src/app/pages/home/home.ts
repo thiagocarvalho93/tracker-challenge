@@ -1,10 +1,4 @@
-import {
-  Component,
-  inject,
-  OnInit,
-  signal,
-  PLATFORM_ID
-} from '@angular/core';
+import { Component, inject, OnInit, signal, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser, DecimalPipe, CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { catchError } from 'rxjs';
@@ -70,7 +64,7 @@ export class Home implements OnInit {
           console.error('Error fetching path coordinates:', error);
           this.loading.set(false);
           throw error;
-        })
+        }),
       )
       .subscribe((coordinates) => {
         this.pathCoordinates.set(coordinates);
@@ -86,17 +80,7 @@ export class Home implements OnInit {
   handleResetCurrentLine() {
     if (!isPlatformBrowser(this.platformId)) return;
 
-    this.trackerApiService
-      .resetCurrentLine()
-      .pipe(
-        catchError((error) => {
-          console.error('Error resetting current line:', error);
-          throw error;
-        })
-      )
-      .subscribe(() => {
-        this.handleUpdateLocation();
-      });
+    localStorage.removeItem('currentLineIndex');
   }
 
   handleUpdateLocation() {
@@ -119,10 +103,11 @@ export class Home implements OnInit {
           console.error('Error fetching status:', error);
           this.loading.set(false);
           throw error;
-        })
+        }),
       )
       .subscribe((status) => {
         this.status.set(status);
+        localStorage.setItem('currentLineIndex', status.currentLineIndex?.toString() || '0');
         this.loading.set(false);
       });
   }
