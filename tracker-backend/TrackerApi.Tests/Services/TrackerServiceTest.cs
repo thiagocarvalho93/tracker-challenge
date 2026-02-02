@@ -1,10 +1,10 @@
 
 using Microsoft.Extensions.Options;
 using Moq;
+using TrackerApi.Configuration;
 using TrackerApi.DTOs;
 using TrackerApi.Repositories.Interfaces;
 using TrackerApi.Services;
-using TrackerApi.Utils;
 
 namespace TrackerApi.Tests.Services;
 

@@ -1,9 +1,9 @@
 using System.Numerics;
 using Microsoft.Extensions.Options;
+using TrackerApi.Configuration;
 using TrackerApi.DTOs;
 using TrackerApi.Repositories.Interfaces;
 using TrackerApi.Services.Interfaces;
-using TrackerApi.Utils;
 using TrackerApi.ValueObjects;
 
 namespace TrackerApi.Services;

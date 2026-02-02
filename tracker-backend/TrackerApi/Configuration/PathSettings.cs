@@ -1,4 +1,4 @@
-namespace TrackerApi.Utils;
+namespace TrackerApi.Configuration;
 
 public class PathSettings
 {

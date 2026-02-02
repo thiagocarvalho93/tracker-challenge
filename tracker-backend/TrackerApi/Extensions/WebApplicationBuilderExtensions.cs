@@ -1,8 +1,8 @@
+using TrackerApi.Configuration;
 using TrackerApi.Repositories;
 using TrackerApi.Repositories.Interfaces;
 using TrackerApi.Services;
 using TrackerApi.Services.Interfaces;
-using TrackerApi.Utils;
 
 namespace TrackerApi.Extensions;
 
