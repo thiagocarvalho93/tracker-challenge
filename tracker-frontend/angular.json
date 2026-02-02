@@ -30,7 +30,7 @@
             ],
             "server": "src/main.server.ts",
             "outputPath": {
-              "base": "../tracker-backend/TrackerApi/wwwroot",
+              "base": "dist/tracker-frontend",
               "browser": ""
             }
           },
