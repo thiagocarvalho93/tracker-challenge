@@ -36,15 +36,15 @@
         >
           Update location
         </button>
+        <button
+          filled
+          matButton="outlined"
+          [disabled]="!trackCurrentLine()"
+          (click)="handleResetCurrentLine()"
+        >
+          Reset Current Line
+        </button>
       </form>
-      <button
-        filled
-        matButton="outlined"
-        [disabled]="!trackCurrentLine()"
-        (click)="handleResetCurrentLine()"
-      >
-        Reset Current Line
-      </button>
       <mat-checkbox [checked]="trackCurrentLine()" (change)="trackCurrentLine.set($event.checked)">
         Track Line
       </mat-checkbox>

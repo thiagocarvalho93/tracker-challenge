@@ -2,11 +2,21 @@ svg {
   width: calc(100vw - 80px);
   height: calc(100vh - 220px);
 }
+
 .text {
-  font-weight: 600;
-  font-size: 7px;
+  font-weight: 700;
+  font-size: 0.5rem;
   dominant-baseline: middle;
   font-family: sans-serif;
+}
+
+@media screen and (max-width: 768px) {
+  svg {
+    height: 100%;
+  }
+  .text {
+    font-size: 0.8rem;
+  }
 }
 
 .path-polyline {

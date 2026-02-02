@@ -39,8 +39,8 @@ export class Graph {
     return `${polyline} ${closestPoint.x},${closestPoint.y}`;
   });
   viewBox = computed(() => {
-    const paddingX = 20;
-    const paddingY = 10;
+    const paddingX = 30;
+    const paddingY = 20;
 
     const xs = this.pathCoordinates().map((coord) => coord.x);
     const ys = this.pathCoordinates().map((coord) => coord.y);

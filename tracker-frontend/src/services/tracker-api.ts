@@ -27,10 +27,4 @@ export class TrackerApiService {
 
     return this.httpClient.get<Status>(url);
   }
-
-  resetCurrentLine(): Observable<any> {
-    const url = `${BASE_URL}/reset`;
-
-    return this.httpClient.delete(url);
-  }
 }
