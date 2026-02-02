@@ -1,5 +1,5 @@
 ## Solution Approach
-### Frontend Logic
+### Frontend
 1. **Path visualization**:
 The path defined in the CSV file is rendered as a polyline, allowing the user to visually understand the tracked route.
 
@@ -7,21 +7,55 @@ The path defined in the CSV file is rendered as a polyline, allowing the user to
 The user can input X and Y coordinates and trigger a calculation request to the backend.
 
 3. **Result rendering**:
-The backend responds with the calculated offset and station values for the given point. These results of the Offset and Station are visually represented in the UI.
+The backend responds with the calculated offset and station values for the given point.
+These results are visually represented in the UI, including the offset line and the corresponding station along the path.
 
-### Backend Logic
-1. **Parse input data**:
-Coordinates are read from the CSV file and mapped into a strongly typed data structure.
+#### The inputs
+Two text inputs, implemented using Angular Material, are provided for the X and Y coordinates.
+Both inputs include validation to ensure that only numeric values are accepted, preventing invalid requests from being sent to the backend.
 
-2. **Build line segments from coordinates**:
+Validation feedback is displayed directly in the UI, improving usability and guiding the user to provide correct input.
+
+#### The graph
+All visual information is rendered using a graph built purely with SVG.
+This approach was chosen to provide greater flexibility and high performance, while avoiding the overhead and limitations of external charting libraries.
+
+Using SVG allows:
+- Precise control over geometric elements (polyline, offset line, station)
+- Efficient rendering, even with frequent updates
+- A lightweight solution with no additional dependencies
+
+#### Responsiveness and Scaling
+
+The graph is fully responsive and automatically scales to fit the available viewport.
+
+Coordinate values received from the backend are mapped to the SVG coordinate system using a normalization step, ensuring that:
+- The full path is always visible regardless of screen size
+- Aspect ratio is preserved
+- User interactions and updates remain smooth across different devices
+
+This approach ensures consistent visualization behavior on both desktop and smaller screens.
+
+### Backend
+1. **Receive User inputs**: The backend receives the X and Y coordinates provided by the frontend via a REST API request.
+
+2. **Parse input data**:
+The path coordinates are read from the CSV file and mapped into a strongly typed data structure, ensuring consistency and type safety.
+
+3. **Build line segments from coordinates**:
 Consecutive coordinates are paired to form a collection of line segments representing the polyline path.
 
-3. **Evaluate each line segment**:
-For each line segment, the algorithm 
-- calculates Station and offset.
-- Determine the closest segment.
-- The line segment with the smallest offset value is selected, as it represents the closest segment to the given point.
-- This segment determines the final information returned by the API.
+4. **Evaluate each line segment**:
+For each line segment, the algorithm
+- Calculates the station and offset relative to the user-provided point
+- Compares the computed offset against previously evaluated segments
+- Identifies the segment with the smallest offset value, representing the closest segment to the point
+
+5. **Send the response**: The calculated offset, station, and other relevant information are returned to the frontend as a structured API response.
+
+#### Validation
+#### Tests
+
 
 ## ▶️ How to Run Locally
 Prerequisites
