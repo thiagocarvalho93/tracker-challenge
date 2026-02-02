@@ -4,8 +4,15 @@ using TrackerApi.Repositories.Interfaces;
 
 namespace TrackerApi.Repositories;
 
-public class PathRepository : IPathRepository
+public class PathRepository(IWebHostEnvironment env) : IPathRepository
 {
+    private readonly IWebHostEnvironment _env = env;
+
+    private string GetFilePath(string fileName)
+    {
+        return Path.Combine(_env.ContentRootPath, "Data", fileName);
+    }
+
     public async Task<IEnumerable<CoordinateDTO>> GetPathCoordinates(string fileName)
     {
         string[] lines = await ReadFileAsync(fileName);
@@ -17,7 +24,7 @@ public class PathRepository : IPathRepository
 
     private static List<CoordinateDTO> MapLinesToCoordinates(string[] lines)
     {
-        return lines
+        return [.. lines
                     .Where(line => !string.IsNullOrWhiteSpace(line))
                     .Select(line =>
                     {
@@ -26,17 +33,12 @@ public class PathRepository : IPathRepository
                         var x = int.Parse(values[0], CultureInfo.InvariantCulture);
                         var y = int.Parse(values[1], CultureInfo.InvariantCulture);
                         return new CoordinateDTO(x, y);
-                    })
-                    .ToList();
+                    })];
     }
 
-    private static async Task<string[]> ReadFileAsync(string fileName)
+    private async Task<string[]> ReadFileAsync(string fileName)
     {
-        var filePath = Path.Combine(
-                    Directory.GetCurrentDirectory(),
-                    "Data",
-                    fileName
-                );
+        var filePath = GetFilePath(fileName);
 
         if (!File.Exists(filePath))
             throw new FileNotFoundException("CSV file not found", filePath);
