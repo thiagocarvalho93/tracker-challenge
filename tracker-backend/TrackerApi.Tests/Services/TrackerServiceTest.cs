@@ -11,15 +11,13 @@ namespace TrackerApi.Tests.Services;
 public class TrackerServiceTest
 {
     private readonly IOptions<PathSettings> _filePathOptions;
-    private readonly StateService _stateService;
-
+    
     public TrackerServiceTest()
     {
         _filePathOptions = Options.Create(new PathSettings
         {
             FileName = "test.csv"
         });
-        _stateService = new StateService();
     }
     private static Mock<IPathRepository> CreateRepositoryMock(
         IEnumerable<CoordinateDTO> coordinates)
@@ -42,7 +40,7 @@ public class TrackerServiceTest
             new CoordinateDTO(0, 0)
         ]);
 
-        var service = new TrackerService(repoMock.Object, _filePathOptions, _stateService);
+        var service = new TrackerService(repoMock.Object, _filePathOptions);
 
         await Assert.ThrowsAsync<InvalidOperationException>(() =>
             service.GetStatus(new CoordinateDTO(1, 1)));
@@ -58,7 +56,7 @@ public class TrackerServiceTest
             new CoordinateDTO(10, 0)
         ]);
 
-        var service = new TrackerService(repoMock.Object, _filePathOptions, _stateService);
+        var service = new TrackerService(repoMock.Object, _filePathOptions);
 
         // Point above middle of line
         var result = await service.GetStatus(new CoordinateDTO(5, 3));
@@ -79,7 +77,7 @@ public class TrackerServiceTest
             new CoordinateDTO(10, 10)
         ]);
 
-        var service = new TrackerService(repoMock.Object, _filePathOptions, _stateService);
+        var service = new TrackerService(repoMock.Object, _filePathOptions);
 
         // Closer to vertical segment
         var result = await service.GetStatus(new CoordinateDTO(12, 6));
@@ -101,7 +99,7 @@ public class TrackerServiceTest
             new CoordinateDTO(0, 0),
         ]);
 
-        var service = new TrackerService(repoMock.Object, _filePathOptions, _stateService);
+        var service = new TrackerService(repoMock.Object, _filePathOptions);
 
         await Assert.ThrowsAsync<InvalidOperationException>(() =>
             service.GetStatusWithLineTrack(new CoordinateDTO(5, 1)));
@@ -117,7 +115,7 @@ public class TrackerServiceTest
             new CoordinateDTO(10, 10)
         ]);
 
-        var service = new TrackerService(repoMock.Object, _filePathOptions, _stateService);
+        var service = new TrackerService(repoMock.Object, _filePathOptions);
 
         var result = await service.GetStatusWithLineTrack(new CoordinateDTO(5, 2));
 
@@ -137,7 +135,7 @@ public class TrackerServiceTest
             new CoordinateDTO(10, 10)
         ]);
 
-        var service = new TrackerService(repoMock.Object, _filePathOptions, _stateService);
+        var service = new TrackerService(repoMock.Object, _filePathOptions);
 
         var result = await service.GetStatusWithLineTrack(new CoordinateDTO(11, 6));
 
@@ -157,7 +155,7 @@ public class TrackerServiceTest
             new CoordinateDTO(10, 10)
         ]);
 
-        var service = new TrackerService(repoMock.Object, _filePathOptions, _stateService);
+        var service = new TrackerService(repoMock.Object, _filePathOptions);
 
         var result = await service.GetStatusWithLineTrack(new CoordinateDTO(12, 8));
 

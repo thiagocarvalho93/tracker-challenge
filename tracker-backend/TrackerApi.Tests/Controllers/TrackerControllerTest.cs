@@ -1,121 +1,115 @@
-namespace TrackerApi.Tests.Controllers;
-
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using TrackerApi.Controllers;
 using TrackerApi.DTOs;
 using TrackerApi.Services.Interfaces;
-using Xunit;
 
-public class TrackerControllerTest
+namespace TrackerApi.Tests.Controllers;
+
+public class TrackerControllerTests
 {
-    private static TrackerController CreateController(
-        Mock<ITrackerService> serviceMock)
+    private readonly Mock<ITrackerService> _trackerServiceMock;
+    private readonly TrackerController _controller;
+
+    public TrackerControllerTests()
     {
-        return new TrackerController(serviceMock.Object);
+        _trackerServiceMock = new Mock<ITrackerService>();
+        _controller = new TrackerController(_trackerServiceMock.Object);
     }
 
-    #region GetStatus
-
     [Fact]
-    public async Task GetStatusLess_ShouldReturnOk_WithStatusDTO()
+    public async Task GetStatus_WhenTrackLineIsFalse_CallsGetStatus()
     {
         // Arrange
-        var coordinate = new CoordinateDTO(5, 3);
-        var expected = new StatusDTO(
-            Offset: 3f,
-            Station: 5f,
-            ClosestPoint: new CoordinateDTO(5, 0),
-            CurrentLineIndex: 0);
+        var coordinate = new CoordinateDTO(1, 2);
 
-        var serviceMock = new Mock<ITrackerService>();
-        serviceMock
+        var expectedResponse = new StatusDTO(
+            Offset: 10.5,
+            Station: 100.0,
+            ClosestPoint: new CoordinateDTO(1, 2),
+            CurrentLineIndex: 0
+        );
+
+        _trackerServiceMock
             .Setup(s => s.GetStatus(coordinate))
-            .ReturnsAsync(expected);
-
-        var controller = CreateController(serviceMock);
+            .ReturnsAsync(expectedResponse);
 
         // Act
-        var result = await controller.GetStatus(coordinate);
+        var result = await _controller.GetStatus(coordinate, trackLine: false);
 
         // Assert
         var okResult = Assert.IsType<OkObjectResult>(result);
-        Assert.Equal(200, okResult.StatusCode);
-        Assert.Equal(expected, okResult.Value);
+        Assert.Equal(expectedResponse, okResult.Value);
 
-        serviceMock.Verify(
-            s => s.GetStatus(coordinate),
-            Times.Once);
+        _trackerServiceMock.Verify(s => s.GetStatus(coordinate), Times.Once);
+        _trackerServiceMock.Verify(
+            s => s.GetStatusWithLineTrack(It.IsAny<CoordinateDTO>(), It.IsAny<int>()),
+            Times.Never
+        );
     }
 
-    #endregion
-
-    #region GetStatusStateful
-
     [Fact]
-    public async Task GetStatusFul_ShouldReturnOk_WithStatusStatefulDTO()
+    public async Task GetStatus_WhenTrackLineIsTrue_CallsGetStatusWithLineTrack()
     {
         // Arrange
-        var coordinate = new CoordinateDTO(10, 6);
-        var lineIndex = 1;
+        var coordinate = new CoordinateDTO(3, 4);
+        var currentLineIndex = 2;
 
-        var expected = new StatusDTO(
-            Offset: 2f,
-            Station: 16f,
-            ClosestPoint: new CoordinateDTO(10, 6),
-            CurrentLineIndex: lineIndex);
+        var expectedResponse = new StatusDTO(
+            Offset: 15.2,
+            Station: 200.0,
+            ClosestPoint: new CoordinateDTO(3, 4),
+            CurrentLineIndex: currentLineIndex
+        );
 
-        var serviceMock = new Mock<ITrackerService>();
-        serviceMock
-            .Setup(s => s.GetStatus(coordinate))
-            .ReturnsAsync(expected);
-
-        var controller = CreateController(serviceMock);
+        _trackerServiceMock
+            .Setup(s => s.GetStatusWithLineTrack(coordinate, currentLineIndex))
+            .ReturnsAsync(expectedResponse);
 
         // Act
-        var result = await controller.GetStatus(coordinate);
+        var result = await _controller.GetStatus(
+            coordinate,
+            trackLine: true,
+            currentLineIndex: currentLineIndex
+        );
 
         // Assert
         var okResult = Assert.IsType<OkObjectResult>(result);
-        Assert.Equal(expected, okResult.Value);
+        Assert.Equal(expectedResponse, okResult.Value);
 
-        serviceMock.Verify(
-            s => s.GetStatus(coordinate),
-            Times.Once);
+        _trackerServiceMock.Verify(
+            s => s.GetStatusWithLineTrack(coordinate, currentLineIndex),
+            Times.Once
+        );
+
+        _trackerServiceMock.Verify(
+            s => s.GetStatus(It.IsAny<CoordinateDTO>()),
+            Times.Never
+        );
     }
 
-    #endregion
-
-    #region GetPathCoordinates
-
     [Fact]
-    public async Task GetPathCoordinates_ShouldReturnOk_WithCoordinates()
+    public async Task GetPathCoordinates_ReturnsOkWithCoordinates()
     {
         // Arrange
-        var expected = new[]
+        var expectedCoordinates = new List<CoordinateDTO>
         {
-            new CoordinateDTO(0, 0),
-            new CoordinateDTO(10, 0)
+            new(1, 1),
+            new(2, 2),
+            new(3, 3)
         };
 
-        var serviceMock = new Mock<ITrackerService>();
-        serviceMock
+        _trackerServiceMock
             .Setup(s => s.GetPathCoordinates())
-            .ReturnsAsync(expected);
-
-        var controller = CreateController(serviceMock);
+            .ReturnsAsync(expectedCoordinates);
 
         // Act
-        var result = await controller.GetPathCoordinates();
+        var result = await _controller.GetPathCoordinates();
 
         // Assert
         var okResult = Assert.IsType<OkObjectResult>(result);
-        Assert.Equal(expected, okResult.Value);
+        Assert.Equal(expectedCoordinates, okResult.Value);
 
-        serviceMock.Verify(
-            s => s.GetPathCoordinates(),
-            Times.Once);
+        _trackerServiceMock.Verify(s => s.GetPathCoordinates(), Times.Once);
     }
-
-    #endregion
 }
