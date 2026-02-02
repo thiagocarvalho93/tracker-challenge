@@ -24,7 +24,6 @@ public static class WebApplicationExtensions
         // DI
         builder.Services.AddScoped<ITrackerService, TrackerService>();
         builder.Services.AddScoped<IPathRepository, PathRepository>();
-        builder.Services.AddSingleton<IStateService, StateService>();
 
         builder.Services.Configure<PathSettings>(
             builder.Configuration.GetSection("PathSettings"));

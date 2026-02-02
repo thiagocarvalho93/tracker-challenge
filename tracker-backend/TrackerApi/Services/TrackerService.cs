@@ -11,17 +11,14 @@ namespace TrackerApi.Services;
 public class TrackerService : ITrackerService
 {
     private readonly IPathRepository _pathRepository;
-    private readonly IStateService _stateService;
     private readonly string _fileName;
 
     public TrackerService(
         IPathRepository pathRepository,
-        IOptions<PathSettings> options,
-        IStateService stateService)
+        IOptions<PathSettings> options)
     {
         _pathRepository = pathRepository;
         _fileName = options.Value.FileName;
-        _stateService = stateService;
 
         if (string.IsNullOrWhiteSpace(_fileName))
             throw new InvalidOperationException("Path file name is not configured.");
@@ -36,7 +33,7 @@ public class TrackerService : ITrackerService
 
         var lines = LineSegment.GetLinesFromCoordinates(coordinates);
 
-        var point = new Vector2(coordinate.X  ?? 0f, coordinate.Y  ?? 0f);
+        var point = new Vector2(coordinate.X ?? 0f, coordinate.Y ?? 0f);
 
         float minOffset = float.MaxValue;
         float station = 0f;
@@ -64,7 +61,7 @@ public class TrackerService : ITrackerService
         return new StatusDTO(minOffset, station, new CoordinateDTO(offsetPoint.X, offsetPoint.Y), currentLineIndex);
     }
 
-    public async Task<StatusDTO> GetStatusWithLineTrack(CoordinateDTO coordinate)
+    public async Task<StatusDTO> GetStatusWithLineTrack(CoordinateDTO coordinate, int currentLineIndex = 0)
     {
         var coordinates = (await GetPathCoordinates()).ToArray();
 
@@ -72,12 +69,11 @@ public class TrackerService : ITrackerService
             throw new InvalidOperationException("Path must contain at least two coordinates.");
 
         var lines = LineSegment.GetLinesFromCoordinates(coordinates);
-        var currentLineIndex = _stateService.GetCurrentLineIndex;
 
         if (currentLineIndex < 0 || currentLineIndex >= lines.Count)
             throw new ArgumentOutOfRangeException(nameof(currentLineIndex));
 
-        var point = new Vector2(coordinate.X  ?? 0f, coordinate.Y  ?? 0f);
+        var point = new Vector2(coordinate.X ?? 0f, coordinate.Y ?? 0f);
 
         // Current line calculations
         var currentLine = lines[currentLineIndex];
@@ -110,8 +106,6 @@ public class TrackerService : ITrackerService
 
         if (nextDistance <= currentDistance)
         {
-            _stateService.SetNextCurrentLine();
-
             var nextStation =
                 currentStation +
                 Vector2.Distance(nextLine.Start, nextClosestPoint);
