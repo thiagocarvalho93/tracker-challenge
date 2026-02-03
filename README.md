@@ -1,5 +1,5 @@
 ## Demo
-A demo will be available temporarily at https://chatter-api.space/
+A demo is available temporarily at https://chatter-api.space/
 
 ## Frontend
 1. **Path visualization**:
@@ -76,6 +76,22 @@ For each line segment, the algorithm
 
 5. **Send the response**: The calculated offset, station, and other relevant information are returned to the frontend as a structured API response.
 
+### The cross paths problem
+During the initial implementation, a potential issue was identified:
+when a position lies exactly over the intersection of two segments—or is slightly closer to a future segment that has not yet been traversed—the algorithm may report an incorrect station or segment index.
+
+For example here when the position is x=126 and y=109:
+![crosspath](./images/crosspath1.png)
+
+If we move the y one unit to y=108 we will get:
+![crosspath2](./images/crosspath2.png)
+
+To address this, a second approach was introduced: line tracking.
+
+In this mode, the client sends the current line index to the backend. Instead of evaluating the entire path, the backend compares the position only against the current line and the next line. If the offset to the next line becomes smaller than the offset to the current line, progression occurs and the next line becomes the new current line—similar to a checkpoint mechanism.
+
+The current line index is stored on the client side (local storage) and updated with each response. This strategy ensures consistent forward progression along the path and prevents incorrect jumps caused by intersecting or closely spaced segments.
+
 ### Project Architecture
 The project is consists of 3 main layers:
 - Controller
@@ -129,9 +145,23 @@ Example Response:
 ```
 
 #### Service
-TODO
+The class [TrackerService.cs](./tracker-backend/TrackerApi/Services/TrackerService.cs) is responsible for the core tracking logic of the application.
+It loads the configured path coordinates and calculates the tracking status of a given point relative to that path, including:
+- The closest point on the path
+- The offset (Euclidean distance to the path)
+- The station, representing the distance along the path
+- The current line segment index
+
+The service supports two methods:
+- GetStatus: Standard tracking, which evaluates the entire path to find the closest segment.
+- GetStatusWithLineTrack: Line tracking, which optimizes the calculation by comparing only the current and next segments.
+
+Path data is retrieved via a repository abstraction, ensuring separation of concerns and testability.
 #### Repository
-TODO
+The [PathRepository](./tracker-backend/TrackerApi/Repositories/PathRepository.cs) is responsible for loading path data from a CSV file stored on the server.
+
+It reads the configured file from the application’s data directory, parses each line into coordinates, and returns the result as a collection of CoordinateDTO objects.
+The repository handles file access and parsing concerns, keeping data retrieval logic isolated from business rules.
 
 ### Offset Calculation
 In order to calculate the value of the offset between a line and a given point, a vectorial approach was taken. 
@@ -247,9 +277,6 @@ The test project uses the following tools:
 - Tests focus on validating business logic, edge cases, and expected behaviors
 
 This setup ensures a high level of confidence in the codebase while keeping tests fast, isolated, and easy to maintain.
-
-## The cross paths problem
-TODO
 
 ## ▶️ How to Run Locally
 Prerequisites
