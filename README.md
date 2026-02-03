@@ -1,5 +1,4 @@
-## Solution Approach
-### Frontend
+## Frontend
 1. **Path visualization**:
 The path defined in the CSV file is rendered as a polyline, allowing the user to visually understand the tracked route.
 
@@ -10,13 +9,17 @@ The user can input X and Y coordinates and trigger a calculation request to the 
 The backend responds with the calculated offset and station values for the given point.
 These results are visually represented in the UI, including the offset line and the corresponding station along the path.
 
-#### The inputs
+#### Inputs
+![inputs](./images/coordinates-inputs.png)
 Two text inputs, implemented using Angular Material, are provided for the X and Y coordinates.
 Both inputs include validation to ensure that only numeric values are accepted, preventing invalid requests from being sent to the backend.
 
 Validation feedback is displayed directly in the UI, improving usability and guiding the user to provide correct input.
 
-#### The graph
+To send the request the user can click the Update location button or press enter while on the X or Y input.
+
+### Graph
+![graph](./images/graph.png)
 All visual information is rendered using a graph built purely with SVG.
 This approach was chosen to provide greater flexibility and high performance, while avoiding the overhead and limitations of external charting libraries.
 
@@ -25,7 +28,7 @@ Using SVG allows:
 - Efficient rendering, even with frequent updates
 - A lightweight solution with no additional dependencies
 
-#### Responsiveness and Scaling
+### Responsiveness and Scaling
 
 The graph is fully responsive and automatically scales to fit the available viewport.
 
@@ -36,7 +39,9 @@ Coordinate values received from the backend are mapped to the SVG coordinate sys
 
 This approach ensures consistent visualization behavior on both desktop and smaller screens.
 
-### Backend
+### Limitations & Future Improvements
+
+## Backend
 1. **Receive User inputs**: The backend receives the X and Y coordinates provided by the frontend via a REST API request.
 
 2. **Parse input data**:
@@ -53,8 +58,10 @@ For each line segment, the algorithm
 
 5. **Send the response**: The calculated offset, station, and other relevant information are returned to the frontend as a structured API response.
 
-#### Validation
-#### Tests
+### Validation
+### Tests
+
+## The cross paths problem
 
 
 ## ▶️ How to Run Locally
