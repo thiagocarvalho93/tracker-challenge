@@ -11,6 +11,7 @@ These results are visually represented in the UI, including the offset line and 
 
 #### Inputs
 ![inputs](./images/coordinates-inputs.png)
+
 Two text inputs, implemented using Angular Material, are provided for the X and Y coordinates.
 Both inputs include validation to ensure that only numeric values are accepted, preventing invalid requests from being sent to the backend.
 
@@ -20,6 +21,7 @@ To send the request the user can click the Update location button or press enter
 
 ### Graph
 ![graph](./images/graph.png)
+
 All visual information is rendered using a graph built purely with SVG.
 This approach was chosen to provide greater flexibility and high performance, while avoiding the overhead and limitations of external charting libraries.
 
@@ -57,6 +59,40 @@ For each line segment, the algorithm
 - Identifies the segment with the smallest offset value, representing the closest segment to the point
 
 5. **Send the response**: The calculated offset, station, and other relevant information are returned to the frontend as a structured API response.
+
+### Offset Calculation
+In order to calculate the value of the offset between a line and a given point, a vectorial approach was taken. 
+Considering the following points:
+- A: Start of the line segment.
+- B: End of the line segment.
+- P: The external point provided by the user.
+The offset is defined as the shortest distance between point P and the line segment AB.
+
+#### Closest Point Calculation
+
+The first step is to compute the point C, which represents the closest point on the line segment AB to the external point P.
+
+1. Construct the vectors:
+- AB = B − A
+- AP = P − A
+
+2. Project vector AP onto AB using the dot product:
+
+3. Clamp the projection factor t to the interval [0 1] to ensure that the resulting point lies within the line segment rather than on the infinite line.
+
+4. Compute the closest point:
+
+Offset Value
+Once the closest point C is determined, the offset is calculated as the Euclidean distance between P and C:
+
+This value represents the perpendicular distance from the input point to the nearest line segment and is used to determine which segment of the polyline is closest to the user-provided coordinate.
+
+### Station Calculation
+The station value represents the accumulated distance along the polyline from its starting point up to the position closest to the user-provided coordinate.
+
+It is calculated as the sum of:
+- The lengths of all line segments preceding the closest segment, and
+- The distance from the start of the closest line segment to the computed closest point on that segment.
 
 ### Validation
 ### Tests
