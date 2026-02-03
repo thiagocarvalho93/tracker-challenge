@@ -72,6 +72,16 @@ For each line segment, the algorithm
 5. **Send the response**: The calculated offset, station, and other relevant information are returned to the frontend as a structured API response.
 
 ### Project Architecture
+The project is consists of 3 main layers:
+- Controller
+- Service (business logic layer)
+- Repository (data access layer)
+
+#### Controller
+TODO
+#### Service
+TODO
+#### Repository
 TODO
 
 ### Offset Calculation
@@ -87,22 +97,40 @@ The offset is defined as the shortest distance between point P and the line segm
 The first step is to compute the point C, which represents the closest point on the line segment AB to the external point P.
 
 1. Construct the vectors:
+
+![vectors](./images/vectors.png)
 - AB = B − A
 - AP = P − A
 
+
 2. Project vector AP onto AB using the dot product:
-TODO
+
+![projection](./images/projection.png)
+
+The normalized projection is given by $t_{\text{normalized}} = \frac{\mathbf{AP} \cdot \mathbf{AB}}{\lVert \mathbf{AB} \rVert^{2}}$.
+
 3. Clamp the projection factor t to the interval [0 1] to ensure that the resulting point lies within the line segment rather than on the infinite line.
 
 4. Compute the closest point:
 
-Offset Value
+$$
+\mathbf{C} = \mathbf{A} + t_{\text{normalized}} \, \mathbf{AB}
+$$
+
+**Offset Value**
+
 Once the closest point C is determined, the offset is calculated as the Euclidean distance between P and C:
+
+$$
+\text{offset} = \lVert \mathbf{P} - \mathbf{C} \rVert
+$$
 
 This value represents the perpendicular distance from the input point to the nearest line segment and is used to determine which segment of the polyline is closest to the user-provided coordinate.
 
 ### Station Calculation
 The station value represents the accumulated distance along the polyline from its starting point up to the position closest to the user-provided coordinate.
+
+![station](./images/station.png)
 
 It is calculated as the sum of:
 - The lengths of all line segments preceding the closest segment, and
