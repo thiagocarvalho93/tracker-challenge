@@ -16,14 +16,13 @@ These results are visually represented in the UI, including the offset line and 
 ![layout](./images/layout.png)
 
 #### 1. Inputs
-![inputs](./images/coordinates-inputs.png)
+![inputs](./images/inputs.png)
 
-Two text inputs, implemented using Angular Material, are provided for the X and Y coordinates.
-Both inputs include validation to ensure that only numeric values are accepted, preventing invalid requests from being sent to the backend.
+The interface provides two text inputs for the X and Y coordinates. A request can be submitted either by clicking the Update Location button or by pressing Enter while focused on either input field.
 
-Validation feedback is displayed directly in the UI, improving usability and guiding the user to provide correct input.
+Both inputs include built-in validation to ensure that only numeric values are accepted, preventing invalid requests from being sent to the backend. Validation feedback is displayed directly in the UI, improving usability and guiding the user to correct any input errors.
 
-To send the request the user can click the Update location button or press enter while on the X or Y input.
+The Track line checkbox enables an alternative tracking mode (see [The Cross-Path Problem](#the-cross-paths-problem)). When enabled, the Reset Line button becomes available, allowing the user to reset the current line index to 0 at any time.
 
 #### 2. Indicators
 ![indicators](./images/indicators.png)
@@ -154,7 +153,7 @@ It loads the configured path coordinates and calculates the tracking status of a
 
 The service supports two methods:
 - GetStatus: Standard tracking, which evaluates the entire path to find the closest segment.
-- GetStatusWithLineTrack: Line tracking, which optimizes the calculation by comparing only the current and next segments.
+- GetStatusWithLineTrack: Line tracking, which implements the calculation by comparing only the current and next segment (see [The Cross-Path Problem](#the-cross-paths-problem)).
 
 Path data is retrieved via a repository abstraction, ensuring separation of concerns and testability.
 #### Repository
