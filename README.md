@@ -9,7 +9,10 @@ The user can input X and Y coordinates and trigger a calculation request to the 
 The backend responds with the calculated offset and station values for the given point.
 These results are visually represented in the UI, including the offset line and the corresponding station along the path.
 
-#### Inputs
+#### Overall layout
+![layout](./images/layout.png)
+
+#### 1. Inputs
 ![inputs](./images/coordinates-inputs.png)
 
 Two text inputs, implemented using Angular Material, are provided for the X and Y coordinates.
@@ -19,7 +22,15 @@ Validation feedback is displayed directly in the UI, improving usability and gui
 
 To send the request the user can click the Update location button or press enter while on the X or Y input.
 
-### Graph
+#### 2. Indicators
+![indicators](./images/indicators.png)
+
+The indicators display the Offset and Station values calculated by the backend.
+Each indicator uses the same color as its corresponding graphical element in the graph, creating a clear visual association between numeric values and their geometric representation.
+
+This design helps the user quickly understand how the calculated values relate to the rendered path and position.
+
+### 3. Graph
 ![graph](./images/graph.png)
 
 All visual information is rendered using a graph built purely with SVG.
