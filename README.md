@@ -1,3 +1,6 @@
+## Demo
+A demo will be available temporarily at https://chatter-api.space/
+
 ## Frontend
 1. **Path visualization**:
 The path defined in the CSV file is rendered as a polyline, allowing the user to visually understand the tracked route.
@@ -49,7 +52,9 @@ Using SVG allows:
 - A lightweight solution with no additional dependencies
 
 ### Responsiveness
-TODO
+
+The frontend application is fully responsive and designed to adapt seamlessly to different screen sizes and devices.
+It provides a consistent and accessible user experience across desktops, tablets, and mobile devices, ensuring usability regardless of platform or resolution.
 
 ### Limitations & Future Improvements
 TODO
@@ -78,7 +83,51 @@ The project is consists of 3 main layers:
 - Repository (data access layer)
 
 #### Controller
-TODO
+The class [TrackerController](./tracker-backend/TrackerApi/Controllers/TrackerController.cs) consists of the mapping of two endpoints:
+- **GET `/api/status`**: Returns the current tracking status based on the provided coordinates.  
+  **Query parameters:**
+  - **x** *(float, required)* — X coordinate of the input point
+  - **y** *(float, required)* — Y coordinate of the input point
+  - **trackLine** *(boolean, optional)* — Enables line tracking logic (default: `false`)
+  - **currentLineIndex** *(integer, optional)* — Index of the current line segment when line tracking is enabled (default: `0`)
+
+
+Example Requests
+
+Get tracking status (without line tracking):
+```
+GET /api/status?x=12.5&y=-3.8
+```
+
+Get tracking status with line tracking enabled:
+```
+GET /api/status?x=12.5&y=-3.8&trackLine=true&currentLineIndex=4
+```
+Example Response
+```
+{
+  "offset": 2.37,
+  "station": 15.8,
+  "closestPoint": {
+    "x": 12.1,
+    "y": -4.0
+  },
+  "currentLineIndex": 0
+}
+```
+
+- **GET /api/path**: Returns the full set of path coordinates provided by the csv file. Does not require any parameter.
+
+Example Response:
+```
+[
+  { "x": 0, "y": 0 },
+  { "x": 50, "y": 20 },
+  { "x": 100, "y": 40 },
+  { "x": 150, "y": 70 }
+]
+```
+
 #### Service
 TODO
 #### Repository
@@ -191,7 +240,7 @@ The test project uses the following tools:
 - xUnit — as the unit testing framework
 - Moq — for mocking dependencies and isolating units under test
 
-Approach
+**Approach**
 
 - Each service, controller, and core component has corresponding unit tests
 - External dependencies are mocked to ensure deterministic and fast test execution
