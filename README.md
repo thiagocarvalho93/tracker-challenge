@@ -33,6 +33,13 @@ This design helps the user quickly understand how the calculated values relate t
 ### 3. Graph
 ![graph](./images/graph.png)
 
+The graph contains the following:
+- Polyline path: generated from the coordinates in the input CSV file, displayed as a black dashed line.
+- Path endpoints: start and end markers, represented by red points with corresponding labels.
+- User input point: the coordinate provided by the user, displayed as a blue point.
+- Offset line: the perpendicular line connecting the user point to the closest point on the path, displayed in blue.
+- Station line: the segment representing the station position along the path, displayed in red.
+
 All visual information is rendered using a graph built purely with SVG.
 This approach was chosen to provide greater flexibility and high performance, while avoiding the overhead and limitations of external charting libraries.
 
@@ -41,18 +48,11 @@ Using SVG allows:
 - Efficient rendering, even with frequent updates
 - A lightweight solution with no additional dependencies
 
-### Responsiveness and Scaling
-
-The graph is fully responsive and automatically scales to fit the available viewport.
-
-Coordinate values received from the backend are mapped to the SVG coordinate system using a normalization step, ensuring that:
-- The full path is always visible regardless of screen size
-- Aspect ratio is preserved
-- User interactions and updates remain smooth across different devices
-
-This approach ensures consistent visualization behavior on both desktop and smaller screens.
+### Responsiveness
+TODO
 
 ### Limitations & Future Improvements
+TODO
 
 ## Backend
 1. **Receive User inputs**: The backend receives the X and Y coordinates provided by the frontend via a REST API request.
@@ -71,6 +71,9 @@ For each line segment, the algorithm
 
 5. **Send the response**: The calculated offset, station, and other relevant information are returned to the frontend as a structured API response.
 
+### Project Architecture
+TODO
+
 ### Offset Calculation
 In order to calculate the value of the offset between a line and a given point, a vectorial approach was taken. 
 Considering the following points:
@@ -88,7 +91,7 @@ The first step is to compute the point C, which represents the closest point on 
 - AP = P − A
 
 2. Project vector AP onto AB using the dot product:
-
+TODO
 3. Clamp the projection factor t to the interval [0 1] to ensure that the resulting point lies within the line segment rather than on the infinite line.
 
 4. Compute the closest point:
@@ -106,10 +109,12 @@ It is calculated as the sum of:
 - The distance from the start of the closest line segment to the computed closest point on that segment.
 
 ### Validation
+TODO
 ### Tests
+TODO
 
 ## The cross paths problem
-
+TODO
 
 ## ▶️ How to Run Locally
 Prerequisites
