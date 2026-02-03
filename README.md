@@ -137,9 +137,67 @@ It is calculated as the sum of:
 - The distance from the start of the closest line segment to the computed closest point on that segment.
 
 ### Validation
-TODO
+The API validates coordinate inputs using Data Annotations to ensure all requests contain valid and usable numeric values.
+
+Each coordinate is represented by the [CoordinateDTO](./tracker-backend/TrackerApi/DTOs/CoordinateDTO.cs) object:
+
+- X and Y are required fields
+- Both values must be valid floating-point numbers
+- Requests with missing or invalid values are automatically rejected with a 400 Bad Request
+
+**Sample Error Response**
+
+When validation fails, the API returns a 400 Bad Request with a detailed error payload:
+```
+{
+  "type": "https://tools.ietf.org/html/rfc7231#section-6.5.1",
+  "title": "One or more validation errors occurred.",
+  "status": 400,
+  "errors": {
+    "X": [
+      "X is required."
+    ]
+  }
+}
+```
+
+If multiple fields are invalid, all errors are returned in the same response:
+```
+{
+  "type": "https://tools.ietf.org/html/rfc7231#section-6.5.1",
+  "title": "One or more validation errors occurred.",
+  "status": 400,
+  "errors": {
+    "X": [
+      "X is required."
+    ],
+    "Y": [
+      "Y is required."
+    ]
+  }
+}
+```
+
+This approach provides clear feedback to API consumers and helps ensure data integrity across all requests.
+
+
 ### Tests
-TODO
+All application classes are covered by unit tests, which are implemented in a separate project [TrackerApi.Tests](/tracker-backend/TrackerApi.Tests/):
+
+**Testing Stack**
+
+The test project uses the following tools:
+
+- xUnit — as the unit testing framework
+- Moq — for mocking dependencies and isolating units under test
+
+Approach
+
+- Each service, controller, and core component has corresponding unit tests
+- External dependencies are mocked to ensure deterministic and fast test execution
+- Tests focus on validating business logic, edge cases, and expected behaviors
+
+This setup ensures a high level of confidence in the codebase while keeping tests fast, isolated, and easy to maintain.
 
 ## The cross paths problem
 TODO
